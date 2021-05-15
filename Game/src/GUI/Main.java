@@ -3,19 +3,20 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package game;
+package GUI;
 
 /**
  *
- * @author liamo
+ * @author Liam O'Connor ID: 18048495
  */
-public class Game {
+public class Main {
 
     /**
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        // TODO code application logic here
+        GameSetup setup = new GameSetup();
+        
     }
     
 }
