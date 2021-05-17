@@ -2,6 +2,7 @@ package GUI;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.awt.event.WindowEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -23,22 +24,6 @@ public class GameSetup {
         startPageWidth = 700;
         startPageHeight = 670;
 
-        JButton b1 = new JButton("Warrior");
-        JButton b2 = new JButton("Elf");
-        JButton b3 = new JButton("Dwarf");
-
-        b1.addActionListener((ActionEvent e) -> {
-            gameplayFrame.setVisible(true);
-        });
-
-        b2.addActionListener((ActionEvent e) -> {
-            gameplayFrame.setVisible(true);
-        });
-
-        b3.addActionListener((ActionEvent e) -> {
-            gameplayFrame.setVisible(true);
-        });
-
         JLabel welcomeLabel = new JLabel("Welcome to the RPG Game GUI");
         welcomeLabel.setHorizontalAlignment(JLabel.CENTER);
         welcomeLabel.setForeground(Color.white);
@@ -59,17 +44,36 @@ public class GameSetup {
         JLabel characterLabel = new JLabel("Choose your Character: ");
         characterLabel.setForeground(Color.white);
 
+        JTextField nameTextBox = new JTextField(10);
+        nameTextBox.setVisible(false);
+
+        JButton enterButton = new JButton("Enter");
+        enterButton.setVisible(false);
+
+        JButton warriorButton = new JButton("Warrior");
+        JButton elfButton = new JButton("Elf");
+        JButton dwarfButton = new JButton("Dwarf");
+
+        JLabel nameLabel = new JLabel("Enter your hero's name: ");
+        nameLabel.setForeground(Color.white);
+        nameLabel.setVisible(false);
+
+        
+        
         JPanel startPageCenterPanel = new JPanel();
         startPageCenterPanel.setBackground(Color.black);
         startPageCenterPanel.add(characterLabel);
-        startPageCenterPanel.add(b1);
-        startPageCenterPanel.add(b2);
-        startPageCenterPanel.add(b3);
+        startPageCenterPanel.add(warriorButton);
+        startPageCenterPanel.add(elfButton);
+        startPageCenterPanel.add(dwarfButton);
+        startPageCenterPanel.add(nameLabel);
+        startPageCenterPanel.add(nameTextBox);
+        startPageCenterPanel.add(enterButton);
 
         JPanel startPageBottomPanel = new JPanel();
         startPageBottomPanel.setBackground(Color.LIGHT_GRAY);
         startPageBottomPanel.setPreferredSize(new Dimension(startPageWidth, 300));
-        
+
         JPanel WarriorPanel = new JPanel();
         WarriorPanel.setBackground(Color.LIGHT_GRAY);
         WarriorPanel.setPreferredSize(new Dimension(225, 300));
@@ -79,7 +83,7 @@ public class GameSetup {
         JLabel WarriorImage = new JLabel(new ImageIcon(warrior));
         WarriorPanel.add(WarriorStats, BorderLayout.NORTH);
         WarriorPanel.add(WarriorImage, BorderLayout.SOUTH);
-        
+
         JPanel ElfPanel = new JPanel();
         ElfPanel.setBackground(Color.LIGHT_GRAY);
         ElfPanel.setPreferredSize(new Dimension(225, 300));
@@ -89,7 +93,7 @@ public class GameSetup {
         JLabel ElfImage = new JLabel(new ImageIcon(elf));
         ElfPanel.add(ElfStats, BorderLayout.NORTH);
         ElfPanel.add(ElfImage, BorderLayout.SOUTH);
-        
+
         JPanel DwarfPanel = new JPanel();
         DwarfPanel.setBackground(Color.LIGHT_GRAY);
         DwarfPanel.setPreferredSize(new Dimension(225, 300));
@@ -99,7 +103,7 @@ public class GameSetup {
         JLabel DwarfImage = new JLabel(new ImageIcon(dwarf));
         DwarfPanel.add(DwarfStats, BorderLayout.NORTH);
         DwarfPanel.add(DwarfImage, BorderLayout.SOUTH);
-        
+
         startPageBottomPanel.add(WarriorPanel, BorderLayout.WEST);
         startPageBottomPanel.add(ElfPanel, BorderLayout.CENTER);
         startPageBottomPanel.add(DwarfPanel, BorderLayout.EAST);
@@ -116,8 +120,41 @@ public class GameSetup {
         startPageFrame.setTitle("Role Player Game GUI");
         startPageFrame.pack();
         startPageFrame.setVisible(true);
+        
+        warriorButton.addActionListener((ActionEvent e) -> {
+            characterLabel.setVisible(false);
+            warriorButton.setVisible(false);
+            elfButton.setVisible(false);
+            dwarfButton.setVisible(false);
+            nameLabel.setVisible(true);
+            nameTextBox.setVisible(true);
+            enterButton.setVisible(true);
+        });
+        
+        elfButton.addActionListener((ActionEvent e) -> {
+            characterLabel.setVisible(false);
+            warriorButton.setVisible(false);
+            elfButton.setVisible(false);
+            dwarfButton.setVisible(false);
+            nameLabel.setVisible(true);
+            nameTextBox.setVisible(true);
+            enterButton.setVisible(true);
+        });
+        
+        dwarfButton.addActionListener((ActionEvent e) -> {
+            characterLabel.setVisible(false);
+            warriorButton.setVisible(false);
+            elfButton.setVisible(false);
+            dwarfButton.setVisible(false);
+            nameLabel.setVisible(true);
+            nameTextBox.setVisible(true);
+            enterButton.setVisible(true);
+        });
 
-        gameplayFrame = new JFrame();
+        enterButton.addActionListener((ActionEvent e) -> {
+            startPageFrame.setVisible(false);
+            gameplayFrame.setVisible(true);
+        });
 
         JButton left = new JButton("Move Left");
         JButton right = new JButton("Move Right");
@@ -159,7 +196,6 @@ public class GameSetup {
         gameplayFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         gameplayFrame.setTitle("Role Player Game GUI");
         gameplayFrame.pack();
-        gameplayFrame.setVisible(false);
 
     }
 }
