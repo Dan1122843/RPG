@@ -23,7 +23,7 @@ import javax.swing.border.Border;
  *
  * @author liamo
  */
-public class GameSetup implements ActionListener {
+public class GameSetup extends DisplayMap implements ActionListener {
     
     private JFrame frame1;
     private JPanel panel1;
@@ -40,8 +40,10 @@ public class GameSetup implements ActionListener {
     private JLabel label3;
     private JLabel label4;
     
+        
     
     public GameSetup() throws IOException{
+        
         frame1 = new JFrame();
         
         
@@ -98,9 +100,6 @@ public class GameSetup implements ActionListener {
         frame1.pack();
         frame1.setVisible(true);    
         
-        
-        
-        
     
         frame2 = new JFrame();
         
@@ -121,7 +120,8 @@ public class GameSetup implements ActionListener {
         
         panel5 = new JPanel();
         panel5.setBackground(Color.white);
-        panel5.setPreferredSize(new Dimension(800, 800));
+        panel5.setPreferredSize(new Dimension(800, 500));
+        super.printMap(panel5);
         
         panel6 = new JPanel();
         panel6.setPreferredSize(new Dimension(800, 120));
@@ -146,6 +146,9 @@ public class GameSetup implements ActionListener {
         
         
     }
+    public void printToPanel5(){
+        
+    }
 
     public void addImg() {
         try {
@@ -157,5 +160,9 @@ public class GameSetup implements ActionListener {
         this.paintComponent(g);
         g.drawImage(img, 0, 0, this.panel1);
 
+    }
+    
+    public JPanel getGameSetup(){
+        return this.panel5;
     }
 }

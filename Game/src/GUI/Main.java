@@ -5,6 +5,8 @@
  */
 package GUI;
 
+import java.io.IOException;
+
 /**
  *
  * @author Liam O'Connor ID: 18048495
@@ -14,8 +16,9 @@ public class Main {
     /**
      * @param args the command line arguments
      */
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         GameSetup setup = new GameSetup();
+        
         
     }
     
