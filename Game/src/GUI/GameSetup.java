@@ -13,7 +13,7 @@ import javax.swing.*;
  *
  * @author liamo
  */
-public class GameSetup {
+public class GameSetup extends DisplayMap{
 
     private final int startPageWidth;
     private final int startPageHeight;
@@ -21,6 +21,7 @@ public class GameSetup {
     private JFrame gameplayFrame;
 
     public GameSetup() throws IOException {
+        super();
         startPageWidth = 700;
         startPageHeight = 670;
 
@@ -174,8 +175,8 @@ public class GameSetup {
         gameplayTopPanel.add(objectiveLabel, BorderLayout.CENTER);
 
         JPanel gameplayCenterPanel = new JPanel();
-        gameplayCenterPanel.setBackground(Color.white);
-        gameplayCenterPanel.setPreferredSize(new Dimension(800, 800));
+        gameplayCenterPanel.setPreferredSize(new Dimension(800, 500));
+        super.printMap(gameplayCenterPanel);
 
         JPanel gameplayBottomPanel = new JPanel();
         gameplayBottomPanel.setPreferredSize(new Dimension(800, 120));
@@ -198,4 +199,6 @@ public class GameSetup {
         gameplayFrame.pack();
 
     }
+    
+    
 }
