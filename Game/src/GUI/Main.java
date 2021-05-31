@@ -16,8 +16,10 @@ public class Main {
     public static void main(String[] args) {
         try {
             GameSetup setup = new GameSetup();
+            
         } catch (IOException ex) {
-            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+            
         }
+        
     }
 }
