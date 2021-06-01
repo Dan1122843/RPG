@@ -34,6 +34,7 @@ public class DisplayMap implements ActionListener{
     
     private JPanel gameplayCenterPanel; 
     private int horisMove;
+    private int vertMove;
 
     public int getHorisMove() {
         return horisMove;
@@ -43,6 +44,13 @@ public class DisplayMap implements ActionListener{
         this.horisMove = horisMove;
     }
     
+    public int getVertMove() {
+        return vertMove;
+    }
+    
+    public void setVertMove(int vertMove) {
+        this.vertMove = vertMove;
+    }    
     
     public DisplayMap() throws IOException{
               
@@ -56,6 +64,11 @@ public class DisplayMap implements ActionListener{
         gameplayCenterPanel.setBackground(new Color(10, 20, 50));
         gameplayCenterPanel.add(new DrawCharacter());
         
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
     class DrawCharacter extends JPanel{
@@ -81,29 +94,22 @@ public class DisplayMap implements ActionListener{
             Component c = getGameplayCenterPanel();
             paintBorder(c, g, 0, 0, 800, 500);
             if(GameSetup.getCharacter() == 1) 
-                g.drawImage(warrior, getHorisMove(), 200, 100, 100, c);
+                g.drawImage(warrior, getHorisMove(), getVertMove(), 75, 75, c);
             if(GameSetup.getCharacter() == 2) 
-                g.drawImage(elf, getHorisMove(), 200, 100, 100, c);
+                g.drawImage(elf, getHorisMove(), getVertMove(), 75, 75, c);
             if(GameSetup.getCharacter() == 3) 
-                g.drawImage(dwarf, getHorisMove(), 200, 100, 100, c);
-            
+                g.drawImage(dwarf, getHorisMove(), getVertMove(), 75, 75, c);
                          
 	}
-        
                
         protected void paintBorder(Component c, Graphics g, int x, int y, int width, int height) {
-
-            g.setColor(Color.pink);
-
-            //  Draw rectangles around the component, but do not draw
-            //  in the component area itself.
-            g.fillRect(x, y, width, 5); 
-            g.fillRect(x, y, 5, height); 
-            g.fillRect(x+width-5, y, 5, height); 
-            g.fillRect(x, y+height-10, width, 5);
             
             g.setColor(Color.white);
-            g.drawRect(780, 200, 20, 100);
+            g.drawRect(765, 400, 35, 95);
+            g.drawRect(0, 300, 35, 95);
+            g.drawRect(765, 200, 35, 95);
+            g.drawRect(0, 100, 35, 95);
+            g.drawRect(765, 0, 35, 95);
         }
     }  
     
@@ -113,5 +119,3 @@ public class DisplayMap implements ActionListener{
     }
     
 }
-
-

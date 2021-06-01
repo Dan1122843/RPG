@@ -30,7 +30,7 @@ public class GameSetup extends DisplayMap {
     }
     
     public int x = 0; //Used for the x movement
-    
+    public int y = 425; //Used for y movement
     
     
 
@@ -100,7 +100,7 @@ public class GameSetup extends DisplayMap {
 
         JLabel instructions = new JLabel("<html><br/><b>How to Play:</b><br/><br/>The aim of the game is to reach the top of the cave "
                 + "by defeating the enemies that cross your path.<br/>Reach the other end of each stage to progress to the next level. "
-                + "Your player is displayed by the X.<br/><br/><br/><b>Each enemies icon, health points and damage stats are the "
+                + "<br/><br/><br/><b>Each enemies icon, health points and damage stats are the "
                 + "following:</b><br/><br/>Demon: &ensp;<b>D - 20HP - 5DMG</b><br/>Spider: &emsp;<b>S - 30HP - 8DMG</b><br/>Vampire: "
                 + "<b>V - 50HP - 15DMG</b><br/>Giant: &ensp;&emsp;<b>G - 70HP - 12DMG</b><br/>Orc Boss: <b>0 - 70HP - 18DMG</b><br/><br/>Have Fun! :)</html>s");
         instructions.setFont(instructions.getFont().deriveFont(14f));
@@ -242,14 +242,19 @@ public class GameSetup extends DisplayMap {
         JPanel gameplayCenterPanel = new JPanel();
         gameplayCenterPanel.setPreferredSize(new Dimension(gameplayPageWidth, (gameplayPageHeight * 71) / 100));
         super.printMap(gameplayCenterPanel);
+        super.setVertMove(425);
         
         
 
         left.addActionListener((ActionEvent e) -> {
             x = x - 50;
-            if(x < 0){
-                x = x + 50;
+            if(x <= 0){
+                if(y == 325 || y == 125){
+                    y = y - 100;
+                }
+                x = 0;
             }
+            super.setVertMove(y);
             super.setHorisMove(x);
             gameplayCenterPanel.validate();
             gameplayCenterPanel.repaint();
@@ -258,8 +263,12 @@ public class GameSetup extends DisplayMap {
         right.addActionListener((ActionEvent e) -> {
             x = x + 50;
             if(x >= 750){
-                x = x - 50;
+                if(y == 425 || y == 225){
+                    y = y - 100;
+                }
+                x = 725;
             }
+            super.setVertMove(y);
             super.setHorisMove(x);
             gameplayCenterPanel.validate();
             gameplayCenterPanel.repaint();
