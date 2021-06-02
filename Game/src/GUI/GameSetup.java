@@ -13,6 +13,7 @@ import javax.swing.*;
  *
  * @author liamo
  */
+
 public class GameSetup extends DisplayMap {
 
     private final int startPageWidth;
