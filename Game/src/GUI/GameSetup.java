@@ -28,11 +28,9 @@ public class GameSetup extends DisplayMap {
     public static void setCharacter(int character) {
         GameSetup.character = character;
     }
-    
+
     public int x = 0; //Used for the x movement
     public int y = 425; //Used for y movement
-    
-    
 
     public GameSetup() throws IOException {
         super();
@@ -174,43 +172,32 @@ public class GameSetup extends DisplayMap {
             startPageCharacterPanel.setVisible(true);
         });
 
-        
-        
-        /*ActionListener characterChosen = (ActionEvent e) -> {
-            startPageCharacterButtonsPanel.setVisible(false);
-            startPageNamePanel.setVisible(true);
-            
-            
-        };*/
-
-
-        warriorButton.addActionListener(new ActionListener(){
+        warriorButton.addActionListener(new ActionListener() {
             @Override
-            public void actionPerformed(ActionEvent e){
+            public void actionPerformed(ActionEvent e) {
                 startPageCharacterButtonsPanel.setVisible(false);
                 startPageNamePanel.setVisible(true);
                 setCharacter(1);
             }
         });
-        
-        elfButton.addActionListener(new ActionListener(){
+
+        elfButton.addActionListener(new ActionListener() {
             @Override
-            public void actionPerformed(ActionEvent e){
+            public void actionPerformed(ActionEvent e) {
                 startPageCharacterButtonsPanel.setVisible(false);
                 startPageNamePanel.setVisible(true);
                 setCharacter(2);
             }
         });
-        
-        dwarfButton.addActionListener(new ActionListener(){
+
+        dwarfButton.addActionListener(new ActionListener() {
             @Override
-            public void actionPerformed(ActionEvent e){
+            public void actionPerformed(ActionEvent e) {
                 startPageCharacterButtonsPanel.setVisible(false);
                 startPageNamePanel.setVisible(true);
                 setCharacter(3);
             }
         });
-        
 
         enterButton.addActionListener((ActionEvent e) -> {
             startPageFrame.setVisible(false);
@@ -226,10 +213,6 @@ public class GameSetup extends DisplayMap {
         //Use the following buttons in an attack panel, seperate from the map panel.
         JButton attack = new JButton("Attack");
         JButton heal = new JButton("Heal");
-        
-        
-        
-        
 
         JPanel gameplayTopPanel = new JPanel();
         gameplayTopPanel.setPreferredSize(new Dimension(gameplayPageWidth, (gameplayPageHeight * 11) / 100));
@@ -243,13 +226,11 @@ public class GameSetup extends DisplayMap {
         gameplayCenterPanel.setPreferredSize(new Dimension(gameplayPageWidth, (gameplayPageHeight * 71) / 100));
         super.printMap(gameplayCenterPanel);
         super.setVertMove(425);
-        
-        
 
         left.addActionListener((ActionEvent e) -> {
             x = x - 50;
-            if(x <= 0){
-                if(y == 325 || y == 125){
+            if (x <= 0) {
+                if (y == 325 || y == 125) {
                     y = y - 100;
                 }
                 x = 0;
@@ -262,8 +243,8 @@ public class GameSetup extends DisplayMap {
 
         right.addActionListener((ActionEvent e) -> {
             x = x + 50;
-            if(x >= 750){
-                if(y == 425 || y == 225){
+            if (x >= 750) {
+                if (y == 425 || y == 225) {
                     y = y - 100;
                 }
                 x = 725;
@@ -273,7 +254,6 @@ public class GameSetup extends DisplayMap {
             gameplayCenterPanel.validate();
             gameplayCenterPanel.repaint();
         });
-        
 
         JPanel gameplayBottomPanel = new JPanel();
         gameplayBottomPanel.setPreferredSize(new Dimension(gameplayPageWidth, (gameplayPageHeight * 17) / 100));
