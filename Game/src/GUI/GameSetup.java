@@ -2,6 +2,7 @@ package GUI;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -185,7 +186,7 @@ public class GameSetup extends DisplayMap {
             startPageCharacterPanel.setVisible(true);
         });
 
-        /*
+        
         warriorButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -213,11 +214,14 @@ public class GameSetup extends DisplayMap {
             }
         });
 
-        enterButton.addActionListener((ActionEvent e) -> {
-            startPageFrame.setVisible(false);
-            gameplayFrame.setVisible(true);
+        enterButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                startPageFrame.setVisible(false);
+                gameplayFrame.setVisible(true);
+            }
         });
-         */
+         
         int gameplayPageWidth = 800;
         int gameplayPageHeight = 700;
 
