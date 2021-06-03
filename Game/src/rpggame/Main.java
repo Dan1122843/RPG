@@ -1,9 +1,10 @@
 package rpggame;
 
+import rpgFileIO.FastestTimesFile;
+import rpgDatabase.Timer;
 import java.util.Random;
 import rpgMap.*;
 import rpgCharacters.*;
-import rpgFileIO.*;
 import java.util.Scanner;
 
 /**

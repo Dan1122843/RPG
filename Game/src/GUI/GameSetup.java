@@ -268,6 +268,7 @@ public class GameSetup extends DisplayMap {
 
         right.addActionListener((ActionEvent e) -> {
             x = x + 50;
+
             if (getHorisMove() == 100 && getVertMove() == 425){
             
             left.setEnabled(false);
@@ -287,6 +288,7 @@ public class GameSetup extends DisplayMap {
             gameplayCenterPanel.repaint();
             }
             else if (x >= 750) {
+
                 if (y == 425 || y == 225) {
                     y = y - 100;
                 }
