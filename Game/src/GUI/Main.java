@@ -137,13 +137,8 @@ public class Main {
                     }
                     
                 } else if (p1.getHealth() <= 0) {
-                    gui.getStatsLabel().setText("<html><b>You Lost!<br/>Ending Game...</b></html>");
-                    try {
-                        Thread.sleep(3000);
-                    } catch (InterruptedException ex) {
-                        Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-                    gui.getGameplayFrame().dispose();
+                    gui.getStatsLabel().setText("<html><b>You Lost!<br/>You didn't manage to defeat the monsters.</b></html>");
+                    gui.battleLost();
                 }
             });
 
