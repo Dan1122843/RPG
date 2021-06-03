@@ -13,7 +13,7 @@ import java.util.logging.*;
 public class FastestTimeDB {
 
     //Sets connections attributes
-    String url = "jdbc:derby://localhost:1527/TimesDB;create=true";
+    String url = "jdbc:derby:TimesDB;create=true";
     String username = "rpg";
     String password = "rpg";
     Connection conn;
