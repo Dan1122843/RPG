@@ -10,6 +10,7 @@ import javax.imageio.ImageIO;
 import javax.swing.*;
 import rpgCharacters.*;
 
+
 /**
  *
  * @author liamo
