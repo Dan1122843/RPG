@@ -5,6 +5,8 @@ import java.awt.event.ActionEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import rpgCharacters.*;
@@ -39,6 +41,7 @@ public class GameSetup extends DisplayMap {
     private final JButton right;
     private final JButton attack;
     private final JButton heal;
+    private final JButton quit;
     private final JPanel combatPanel;
     private final JPanel mapPanel;
 
@@ -225,6 +228,7 @@ public class GameSetup extends DisplayMap {
         right = new JButton("Move Right");
         attack = new JButton("Attack");
         heal = new JButton("Heal");
+        quit = new JButton("Quit");
 
         JPanel gameplayTopPanel = new JPanel();
         gameplayTopPanel.setPreferredSize(new Dimension(gameplayPageWidth, (gameplayPageHeight * 11) / 100));
@@ -271,6 +275,7 @@ public class GameSetup extends DisplayMap {
         actionsPanel.add(right);
         actionsPanel.add(attack);
         actionsPanel.add(heal);
+        actionsPanel.add(quit);
         statsPanel.add(statsLabel);
 
         gameplayBottomPanel.add(statsPanel, BorderLayout.NORTH);
@@ -289,6 +294,12 @@ public class GameSetup extends DisplayMap {
         right.setVisible(true);
         attack.setVisible(false);
         heal.setVisible(false);
+        quit.setVisible(false);
+
+        quit.addActionListener((ActionEvent e) -> {
+            gameplayFrame.dispose();
+        });
+
     }
 
     public Enemy checkForEnemy(String direction) {
@@ -402,10 +413,12 @@ public class GameSetup extends DisplayMap {
     }
 
     public void battleLost() {
-        //Game losing code
+        getAttack().setVisible(false);
+        getHeal().setVisible(false);
+        getQuit().setVisible(true);
     }
-    
-    public void gameWon(){
+
+    public void gameWon() {
         //Game winning code
     }
 
@@ -562,5 +575,12 @@ public class GameSetup extends DisplayMap {
      */
     public JLabel getEnemyStatsLabel() {
         return enemyStatsLabel;
+    }
+
+    /**
+     * @return the quit
+     */
+    public JButton getQuit() {
+        return quit;
     }
 }
