@@ -20,6 +20,7 @@ public class Main {
     public static boolean isDwarf = false;
     public static boolean isElf = false;
     public static Player p1;
+    public static Enemy enemy;
     public static int potionCount = 3;
 
     /**
@@ -89,8 +90,9 @@ public class Main {
                         p1 = new Dwarf(PlayerName);
                     }
 
-                    gui.getStatsLabel().setText("<html><b>Player Name: </b>" + p1.getName() + "<b>&emsp;Health: </b>"
-                            + p1.getHealth() + " HP<b>&emsp;Attack: </b>" + p1.getAttack() + " DMG<b>&emsp;Potions: </b>" + potionCount + "</html>");
+                    gui.getStatsLabel().setText("<html><b>Player Name: </b>" + p1.getName()
+                            + "<b>&emsp;Health: </b>" + p1.getHealth() + " HP<b>&emsp;Attack: </b>"
+                            + p1.getAttack() + " DMG<b>&emsp;Potions: </b>" + potionCount + "</html>");
                     gui.getObjectiveLabel().setText("<html>Find your way out of the dungeon. Defeat all the enemies: <br/><br/>" + fastestPlayerString + "<html/>");
                     gui.getStartPageFrame().setVisible(false);
                     gui.getGameplayFrame().setVisible(true);
@@ -101,7 +103,7 @@ public class Main {
 
             gui.getRight().addActionListener((ActionEvent e) -> {
 
-                Enemy enemy = gui.checkForEnemy();
+                enemy = gui.checkForEnemy("right");
                 if (enemy != null) {
                     //Call attack method with p1 and enemy
                 }
@@ -109,7 +111,7 @@ public class Main {
 
             gui.getLeft().addActionListener((ActionEvent e) -> {
 
-                Enemy enemy = gui.checkForEnemy();
+                enemy = gui.checkForEnemy("left");
                 if (enemy != null) {
                     //Call attack method with p1 and enemy
                 }
@@ -117,10 +119,84 @@ public class Main {
 
             gui.getAttack().addActionListener((ActionEvent e) -> {
                 //Code for when the player presses attack
+                enemy.setHealth(enemy.getHealth() - p1.getAttack());
+                p1.setHealth(p1.getHealth() - enemy.getAttack());
+                gui.getStatsLabel().setText("<html><b>Player Name: </b>" + p1.getName()
+                        + "<b>&emsp;Health: </b>" + p1.getHealth() + " HP<b>&emsp;Attack: </b>"
+                        + p1.getAttack() + " DMG<b>&emsp;Potions: </b>" + potionCount + "</html>");
+                
+                gui.getEnemyStatsLabel().setText("<html><b>Enemy Name: </b>" + enemy.getName()
+                        + "<b>&emsp;Health: </b>" + enemy.getHealth()
+                        + " HP<b>&emsp;Attack: </b>" + enemy.getAttack() + " DMG");
+                
+                if (enemy.getHealth() <= 0) {
+                    if (enemy.getName().equals("OrcBoss")){
+                        gui.gameWon();
+                    } else {
+                        gui.battleWon();
+                    }
+                    
+                } else if (p1.getHealth() <= 0) {
+                    gui.getStatsLabel().setText("<html><b>You Lost!<br/>Ending Game...</b></html>");
+                    try {
+                        Thread.sleep(3000);
+                    } catch (InterruptedException ex) {
+                        Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                    gui.getGameplayFrame().dispose();
+                }
             });
 
             gui.getHeal().addActionListener((ActionEvent e) -> {
                 //Code for when the player presses heal
+                if (isWarrior) {
+                    if (p1.getHealth() != 100) {
+                        if (p1.getHealth() >= 80) {
+                            p1.setHealth(100);
+                            System.out.println("\nYou heal to 100hp");
+                        } else {
+                            p1.setHealth(p1.getHealth() + 25);
+                            System.out.println("\nYou heal to " + p1.getHealth() + "hp");
+                        }
+
+                        potionCount -= 1;
+                        System.out.println("\nYou now have " + potionCount + " potions");
+                    } else {
+                        System.out.println("\nYou are already at max health");
+                    }
+                }
+                if (isDwarf) {
+                    if (p1.getHealth() != 125) {
+                        if (p1.getHealth() >= 100) {
+                            p1.setHealth(125);
+                            System.out.println("\nYou heal to 125hp");
+                        } else {
+                            p1.setHealth(p1.getHealth() + 25);
+                            System.out.println("\nYou heal to " + p1.getHealth() + "hp");
+                        }
+
+                        potionCount -= 1;
+                        System.out.println("\nYou now have " + potionCount + " potions");
+                    } else {
+                        System.out.println("\nYou are already at max health");
+                    }
+                }
+                if (isElf) {
+                    if (p1.getHealth() != 75) {
+                        if (p1.getHealth() >= 50) {
+                            p1.setHealth(75);
+                            System.out.println("\nYou heal to 75hp");
+                        } else {
+                            p1.setHealth(p1.getHealth() + 25);
+                            System.out.println("\nYou heal to " + p1.getHealth() + "hp");
+                        }
+
+                        potionCount -= 1;
+                        System.out.println("\nYou now have " + potionCount + " potions");
+                    } else {
+                        System.out.println("\nYou are already at max health");
+                    }
+                }
             });
 
         } catch (IOException ex) {
