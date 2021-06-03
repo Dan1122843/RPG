@@ -8,7 +8,6 @@ import java.io.File;
 import java.io.IOException;
 import javax.imageio.ImageIO;
 import javax.swing.*;
-import rpgCharacters.*;
 
 /**
  *
@@ -19,17 +18,21 @@ public class GameSetup extends DisplayMap {
 
     private final int startPageWidth;
     private final int startPageHeight;
-
+    private final JTextField nameTextBox;
+    private final JButton warriorButton;
+    private final JButton elfButton;
+    private final JButton dwarfButton;
+    private final JButton enterButton;
+    private final JPanel startPageCharacterButtonsPanel;
+    private final JPanel startPageNamePanel;
+    private final JLabel objectiveLabel;
+    private JLabel nameLabel;
+    private final JFrame startPageFrame;
     private JFrame gameplayFrame;
+    private final JPanel statsPanel;
+    private final JPanel actionsPanel;
+    private final JLabel statsLabel;
     private static int character; //used to display the character: warrior = 1, elf = 2, dwarf = 3
-
-    public static int getCharacter() {
-        return character;
-    }
-
-    public static void setCharacter(int character) {
-        GameSetup.character = character;
-    }
 
     public int x = 0; //Used for the x movement
     public int y = 425; //Used for y movement
@@ -59,28 +62,28 @@ public class GameSetup extends DisplayMap {
         JLabel characterLabel = new JLabel("Choose your Character: ");
         characterLabel.setForeground(Color.white);
 
-        JTextField nameTextBox = new JTextField(10);
+        nameTextBox = new JTextField(10);
 
-        JButton enterButton = new JButton("Enter");
+        enterButton = new JButton("Enter");
 
         JButton startButton = new JButton("Start");
-        JButton warriorButton = new JButton("Warrior");
-        JButton elfButton = new JButton("Elf");
-        JButton dwarfButton = new JButton("Dwarf");
+        warriorButton = new JButton("Warrior");
+        elfButton = new JButton("Elf");
+        dwarfButton = new JButton("Dwarf");
 
-        JLabel nameLabel = new JLabel("Enter your hero's name: ");
+        nameLabel = new JLabel("Enter your hero's name: ");
         nameLabel.setForeground(Color.white);
 
         JPanel startPageStartPanel = new JPanel();
         startPageStartPanel.setBackground(Color.black);
         startPageStartPanel.setPreferredSize(new Dimension(startPageWidth, (startPageHeight * 6) / 100));
 
-        JPanel startPageCharacterButtonsPanel = new JPanel();
+        startPageCharacterButtonsPanel = new JPanel();
         startPageCharacterButtonsPanel.setBackground(Color.black);
         startPageCharacterButtonsPanel.setVisible(false);
         startPageCharacterButtonsPanel.setPreferredSize(new Dimension(startPageWidth, (startPageHeight * 6) / 100));
 
-        JPanel startPageNamePanel = new JPanel();
+        startPageNamePanel = new JPanel();
         startPageNamePanel.setBackground(Color.black);
         startPageNamePanel.setVisible(false);
         startPageNamePanel.setPreferredSize(new Dimension(startPageWidth, (startPageHeight * 6) / 100));
@@ -155,7 +158,7 @@ public class GameSetup extends DisplayMap {
         startPagePanel.add(startPageInstructionsPanel, BorderLayout.SOUTH);
         startPagePanel.add(startPageCharacterPanel, BorderLayout.SOUTH);
 
-        JFrame startPageFrame = new JFrame();
+        startPageFrame = new JFrame();
         Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
         startPageFrame.setLocation(dim.width / 2 - startPageWidth / 2, dim.height / 2 - startPageHeight / 2);
         startPageFrame.setPreferredSize(new Dimension(startPageWidth, startPageHeight));
@@ -174,35 +177,31 @@ public class GameSetup extends DisplayMap {
             startPageCharacterPanel.setVisible(true);
         });
         
-        Player player = null;
-        
+        /*
         warriorButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                startPageCharacterButtonsPanel.setVisible(false);
-                startPageNamePanel.setVisible(true);
+                getStartPageCharacterButtonsPanel().setVisible(false);
+                getStartPageNamePanel().setVisible(true);
                 setCharacter(1);
-                /*player = new Warrior("");*/
             }
         });
 
         elfButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                startPageCharacterButtonsPanel.setVisible(false);
-                startPageNamePanel.setVisible(true);
+                getStartPageCharacterButtonsPanel().setVisible(false);
+                getStartPageNamePanel().setVisible(true);
                 setCharacter(2);
-                /*player = new Elf("");*/
             }
         });
 
         dwarfButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                startPageCharacterButtonsPanel.setVisible(false);
-                startPageNamePanel.setVisible(true);
+                getStartPageCharacterButtonsPanel().setVisible(false);
+                getStartPageNamePanel().setVisible(true);
                 setCharacter(3);
-                /*player = new Dwarf("");*/
             }
         });
 
@@ -210,6 +209,7 @@ public class GameSetup extends DisplayMap {
             startPageFrame.setVisible(false);
             gameplayFrame.setVisible(true);
         });
+        */
 
         int gameplayPageWidth = 800;
         int gameplayPageHeight = 700;
@@ -225,7 +225,7 @@ public class GameSetup extends DisplayMap {
         gameplayTopPanel.setPreferredSize(new Dimension(gameplayPageWidth, (gameplayPageHeight * 11) / 100));
         gameplayTopPanel.setBackground(Color.darkGray);
 
-        JLabel objectiveLabel = new JLabel("Find your way out of the dungeon. Defeat all the enemies: ");
+        objectiveLabel = new JLabel("<html>Find your way out of the dungeon. Defeat all the enemies: <br/><br/>Good Luck Player<html/>");
         objectiveLabel.setForeground(Color.white);
         gameplayTopPanel.add(objectiveLabel, BorderLayout.CENTER);
 
@@ -269,7 +269,7 @@ public class GameSetup extends DisplayMap {
         right.addActionListener((ActionEvent e) -> {
             x = x + 50;
 
-            if (getHorisMove() == 100 && getVertMove() == 425){
+            if (getHorisMove() == 150 && getVertMove() == 425){
             
             left.setEnabled(false);
             right.setEnabled(false);
@@ -307,18 +307,29 @@ public class GameSetup extends DisplayMap {
         heal.addActionListener ((ActionEvent e) -> {
             
         });
+        
+        statsPanel = new JPanel();
+        actionsPanel = new JPanel();
 
         JPanel gameplayBottomPanel = new JPanel();
+        gameplayBottomPanel.setLayout(new BorderLayout());
         gameplayBottomPanel.setPreferredSize(new Dimension(gameplayPageWidth, (gameplayPageHeight * 17) / 100));
         gameplayBottomPanel.setBackground(Color.LIGHT_GRAY);
-        gameplayBottomPanel.setLayout(new FlowLayout());
         JLabel actionLabel = new JLabel("Pick an action");
         actionLabel.setForeground(Color.red);
-        gameplayBottomPanel.add(actionLabel, BorderLayout.LINE_START);
-        gameplayBottomPanel.add(left, BorderLayout.WEST);
-        gameplayBottomPanel.add(right, BorderLayout.EAST);
-        gameplayBottomPanel.add(attack, BorderLayout.NORTH);
-        gameplayBottomPanel.add(heal, BorderLayout.SOUTH);
+        
+        statsLabel = new JLabel("Player Name:   Health:   Attack:  ");
+        statsLabel.setFont(statsLabel.getFont().deriveFont(18f));
+        
+        actionsPanel.add(actionLabel);
+        actionsPanel.add(left);
+        actionsPanel.add(right);
+        actionsPanel.add(attack);
+        actionsPanel.add(heal);
+        statsPanel.add(statsLabel);
+        
+        gameplayBottomPanel.add(statsPanel, BorderLayout.NORTH);
+        gameplayBottomPanel.add(actionsPanel);
 
         gameplayFrame = new JFrame();
         gameplayFrame.add(gameplayTopPanel, BorderLayout.NORTH);
@@ -338,5 +349,104 @@ public class GameSetup extends DisplayMap {
         attack.setVisible(false);
         heal.setVisible(false);
 
+    }
+
+    /**
+     * @return the nameTextBox
+     */
+    public JTextField getNameTextBox() {
+        return nameTextBox;
+    }
+
+    /**
+     * @return the warriorButton
+     */
+    public JButton getWarriorButton() {
+        return warriorButton;
+    }
+
+    /**
+     * @return the elfButton
+     */
+    public JButton getElfButton() {
+        return elfButton;
+    }
+
+    /**
+     * @return the dwarfButton
+     */
+    public JButton getDwarfButton() {
+        return dwarfButton;
+    }
+    
+    public static int getCharacter() {
+        return character;
+    }
+
+    public static void setCharacter(int character) {
+        GameSetup.character = character;
+    }
+
+    /**
+     * @return the enterButton
+     */
+    public JButton getEnterButton() {
+        return enterButton;
+    }
+
+    /**
+     * @return the startPageCharacterButtonsPanel
+     */
+    public JPanel getStartPageCharacterButtonsPanel() {
+        return startPageCharacterButtonsPanel;
+    }
+
+    /**
+     * @return the startPageNamePanel
+     */
+    public JPanel getStartPageNamePanel() {
+        return startPageNamePanel;
+    }
+
+    /**
+     * @return the startPageFrame
+     */
+    public JFrame getStartPageFrame() {
+        return startPageFrame;
+    }
+
+    /**
+     * @return the gameplayFrame
+     */
+    public JFrame getGameplayFrame() {
+        return gameplayFrame;
+    }
+
+    /**
+     * @return the objectiveLabel
+     */
+    public JLabel getObjectiveLabel() {
+        return objectiveLabel;
+    }
+
+    /**
+     * @param nameLabel the nameLabel to set
+     */
+    public void setNameLabel(JLabel nameLabel) {
+        this.nameLabel = nameLabel;
+    }
+
+    /**
+     * @return the nameLabel
+     */
+    public JLabel getNameLabel() {
+        return nameLabel;
+    }
+
+    /**
+     * @return the statsLabel
+     */
+    public JLabel getStatsLabel() {
+        return statsLabel;
     }
 }
