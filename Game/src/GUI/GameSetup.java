@@ -8,11 +8,13 @@ import java.io.File;
 import java.io.IOException;
 import javax.imageio.ImageIO;
 import javax.swing.*;
+import rpgCharacters.*;
 
 /**
  *
  * @author liamo
  */
+
 public class GameSetup extends DisplayMap {
 
     private final int startPageWidth;
@@ -28,11 +30,9 @@ public class GameSetup extends DisplayMap {
     public static void setCharacter(int character) {
         GameSetup.character = character;
     }
-    
+
     public int x = 0; //Used for the x movement
     public int y = 425; //Used for y movement
-    
-    
 
     public GameSetup() throws IOException {
         super();
@@ -173,44 +173,38 @@ public class GameSetup extends DisplayMap {
             startPageCharacterButtonsPanel.setVisible(true);
             startPageCharacterPanel.setVisible(true);
         });
-
         
+        Player player = null;
         
-        /*ActionListener characterChosen = (ActionEvent e) -> {
-            startPageCharacterButtonsPanel.setVisible(false);
-            startPageNamePanel.setVisible(true);
-            
-            
-        };*/
-
-
-        warriorButton.addActionListener(new ActionListener(){
+        warriorButton.addActionListener(new ActionListener() {
             @Override
-            public void actionPerformed(ActionEvent e){
+            public void actionPerformed(ActionEvent e) {
                 startPageCharacterButtonsPanel.setVisible(false);
                 startPageNamePanel.setVisible(true);
                 setCharacter(1);
+                /*player = new Warrior("");*/
             }
         });
-        
-        elfButton.addActionListener(new ActionListener(){
+
+        elfButton.addActionListener(new ActionListener() {
             @Override
-            public void actionPerformed(ActionEvent e){
+            public void actionPerformed(ActionEvent e) {
                 startPageCharacterButtonsPanel.setVisible(false);
                 startPageNamePanel.setVisible(true);
                 setCharacter(2);
+                /*player = new Elf("");*/
             }
         });
-        
-        dwarfButton.addActionListener(new ActionListener(){
+
+        dwarfButton.addActionListener(new ActionListener() {
             @Override
-            public void actionPerformed(ActionEvent e){
+            public void actionPerformed(ActionEvent e) {
                 startPageCharacterButtonsPanel.setVisible(false);
                 startPageNamePanel.setVisible(true);
                 setCharacter(3);
+                /*player = new Dwarf("");*/
             }
         });
-        
 
         enterButton.addActionListener((ActionEvent e) -> {
             startPageFrame.setVisible(false);
@@ -219,17 +213,13 @@ public class GameSetup extends DisplayMap {
 
         int gameplayPageWidth = 800;
         int gameplayPageHeight = 700;
-
+        
         JButton left = new JButton("Move Left");
         JButton right = new JButton("Move Right");
 
         //Use the following buttons in an attack panel, seperate from the map panel.
         JButton attack = new JButton("Attack");
         JButton heal = new JButton("Heal");
-        
-        
-        
-        
 
         JPanel gameplayTopPanel = new JPanel();
         gameplayTopPanel.setPreferredSize(new Dimension(gameplayPageWidth, (gameplayPageHeight * 11) / 100));
@@ -244,12 +234,28 @@ public class GameSetup extends DisplayMap {
         super.printMap(gameplayCenterPanel);
         super.setVertMove(425);
         
-        
+        JPanel combatPanel = new JPanel(null);
+        gameplayCenterPanel.setPreferredSize(new Dimension(gameplayPageWidth, (gameplayPageHeight * 71) / 100));
+        JLabel playerHealthLabel = new JLabel("Health: ");
+        JLabel playerAttackLabel = new JLabel("Attack: ");
+        JLabel playerPotionLabel = new JLabel("Potions: ");
+        JLabel enemyHealthLabel = new JLabel("Health: ");
+        JLabel enemyAttackLabel = new JLabel("Attack: ");
+        combatPanel.add(playerHealthLabel);
+        combatPanel.add(playerAttackLabel);
+        combatPanel.add(playerPotionLabel);
+        combatPanel.add(enemyHealthLabel);
+        combatPanel.add(enemyAttackLabel);
+        playerHealthLabel.setBounds(260, 450, 100, 30);
+        playerAttackLabel.setBounds(370, 450, 100, 30);
+        playerPotionLabel.setBounds(480, 450, 100, 30);
+        enemyHealthLabel.setBounds(320, 190, 100, 30);
+        enemyAttackLabel.setBounds(420, 190, 100, 30);
 
         left.addActionListener((ActionEvent e) -> {
             x = x - 50;
-            if(x <= 0){
-                if(y == 325 || y == 125){
+            if (x <= 0) {
+                if (y == 325 || y == 125) {
                     y = y - 100;
                 }
                 x = 0;
@@ -262,8 +268,26 @@ public class GameSetup extends DisplayMap {
 
         right.addActionListener((ActionEvent e) -> {
             x = x + 50;
-            if(x >= 750){
-                if(y == 425 || y == 225){
+            if (getHorisMove() == 100 && getVertMove() == 425){
+            
+            left.setEnabled(false);
+            right.setEnabled(false);
+            left.setVisible(false);
+            right.setVisible(false);
+            
+            attack.setEnabled(true);
+            heal.setEnabled(true);
+            attack.setVisible(true);
+            heal.setVisible(true);
+            
+            gameplayFrame.add(combatPanel);
+            
+            gameplayCenterPanel.setVisible(false);            
+            gameplayCenterPanel.validate();
+            gameplayCenterPanel.repaint();
+            }
+            else if (x >= 750) {
+                if (y == 425 || y == 225) {
                     y = y - 100;
                 }
                 x = 725;
@@ -274,6 +298,13 @@ public class GameSetup extends DisplayMap {
             gameplayCenterPanel.repaint();
         });
         
+        attack.addActionListener ((ActionEvent e) -> {
+            
+        });
+        
+        heal.addActionListener ((ActionEvent e) -> {
+            
+        });
 
         JPanel gameplayBottomPanel = new JPanel();
         gameplayBottomPanel.setPreferredSize(new Dimension(gameplayPageWidth, (gameplayPageHeight * 17) / 100));
@@ -284,8 +315,8 @@ public class GameSetup extends DisplayMap {
         gameplayBottomPanel.add(actionLabel, BorderLayout.LINE_START);
         gameplayBottomPanel.add(left, BorderLayout.WEST);
         gameplayBottomPanel.add(right, BorderLayout.EAST);
-        //gameplayBottomPanel.add(attack, BorderLayout.NORTH);
-        //gameplayBottomPanel.add(heal, BorderLayout.SOUTH);
+        gameplayBottomPanel.add(attack, BorderLayout.NORTH);
+        gameplayBottomPanel.add(heal, BorderLayout.SOUTH);
 
         gameplayFrame = new JFrame();
         gameplayFrame.add(gameplayTopPanel, BorderLayout.NORTH);
@@ -295,6 +326,15 @@ public class GameSetup extends DisplayMap {
         gameplayFrame.setLocation(dim.width / 2 - gameplayPageWidth / 2, dim.height / 2 - gameplayPageHeight / 2);
         gameplayFrame.setTitle("Role Player Game GUI");
         gameplayFrame.pack();
+        
+        left.setEnabled(true);
+        right.setEnabled(true);
+        left.setVisible(true);
+        right.setVisible(true);
+        attack.setEnabled(false);
+        heal.setEnabled(false);
+        attack.setVisible(false);
+        heal.setVisible(false);
 
     }
 }
