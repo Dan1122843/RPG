@@ -3,6 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+
 package GUI;
 import java.awt.BasicStroke;
 import java.awt.BorderLayout;
@@ -77,11 +78,33 @@ public class DisplayMap implements ActionListener{
         BufferedImage elf;
         BufferedImage dwarf;
         
+        BufferedImage demon;
+        BufferedImage spider;
+        BufferedImage vampire;
+        BufferedImage giant;
+        BufferedImage orcBoss;
+        
+        /*
+        Dimentions of the BufferedImages(px):
+        deamon: 50w, 46h
+        spider: 50w, 34h
+        vampire: 50w, 25h
+        giant:50w, 52h
+        orcboss: 50w, 37h
+        */
+        
         DrawCharacter() throws IOException {
             this.warrior = ImageIO.read(new File("./warrior.png"));
             this.elf = ImageIO.read(new File("./elf.png"));
             this.dwarf = ImageIO.read(new File("./dwarf.png"));
             this.setPreferredSize(new Dimension(50, 50));
+            
+            this.demon = ImageIO.read(new File("./demon.jpg"));
+            this.spider = ImageIO.read(new File("./spider.jpg"));
+            this.vampire = ImageIO.read(new File("./vampire.jpg"));
+            this.giant = ImageIO.read(new File("./giant.jpg"));
+            this.orcBoss = ImageIO.read(new File("./orcboss.jpg"));
+            
             
         }
 	
@@ -99,6 +122,15 @@ public class DisplayMap implements ActionListener{
                 g.drawImage(elf, getHorisMove(), getVertMove(), 75, 75, c);
             if(GameSetup.getCharacter() == 3) 
                 g.drawImage(dwarf, getHorisMove(), getVertMove(), 75, 75, c);
+            
+            
+            //g.drawImage("", xdist, ydist, c);
+            g.drawImage(demon, 250, 450, c);
+            g.drawImage(demon, 550, 450, c);
+            g.drawImage(spider, 350, 350, c);
+            g.drawImage(vampire, 350, 250, c);
+            g.drawImage(giant, 350, 150, c);
+            g.drawImage(orcBoss, 350, 50, c);
                          
 	}
                
