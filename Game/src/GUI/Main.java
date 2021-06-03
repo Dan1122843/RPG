@@ -114,6 +114,14 @@ public class Main {
                     //Call attack method with p1 and enemy
                 }
             });
+            
+            gui.getAttack().addActionListener((ActionEvent e) -> {
+                //Code for when the player presses attack
+            });
+            
+            gui.getHeal().addActionListener((ActionEvent e) -> {
+                //Code for when the player presses heal
+            });
 
         } catch (IOException ex) {
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
