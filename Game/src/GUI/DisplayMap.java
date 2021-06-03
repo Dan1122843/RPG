@@ -128,8 +128,8 @@ public class DisplayMap implements ActionListener{
             g.drawImage(demon, 250, 450, c);
             g.drawImage(demon, 550, 450, c);
             g.drawImage(spider, 350, 350, c);
-            g.drawImage(vampire, 350, 250, c);
-            g.drawImage(giant, 350, 150, c);
+            g.drawImage(vampire, 250, 250, c);
+            g.drawImage(giant, 550, 150, c);
             g.drawImage(orcBoss, 350, 50, c);
                          
 	}

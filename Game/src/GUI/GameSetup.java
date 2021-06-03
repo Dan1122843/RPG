@@ -27,12 +27,20 @@ public class GameSetup extends DisplayMap {
     private final JLabel objectiveLabel;
     private JLabel nameLabel;
     private final JFrame startPageFrame;
-    private JFrame gameplayFrame;
+    private final JFrame gameplayFrame;
     private final JPanel statsPanel;
     private final JPanel actionsPanel;
     private final JLabel statsLabel;
+    private final JLabel enemyStatsLabel;
     private static int character; //used to display the character: warrior = 1, elf = 2, dwarf = 3
     private static Enemy enemy;
+    
+    private final JButton left;
+    private final JButton right;
+    private final JButton attack;
+    private final JButton heal;
+    private final JPanel combatPanel;
+    private final JPanel mapPanel;
 
     public int x = 0; //Used for the x movement
     public int y = 425; //Used for y movement
@@ -213,12 +221,12 @@ public class GameSetup extends DisplayMap {
         int gameplayPageWidth = 800;
         int gameplayPageHeight = 700;
 
-        JButton left = new JButton("Move Left");
-        JButton right = new JButton("Move Right");
+        left = new JButton("Move Left");
+        right = new JButton("Move Right");
 
         //Use the following buttons in an attack panel, seperate from the map panel.
-        JButton attack = new JButton("Attack");
-        JButton heal = new JButton("Heal");
+        attack = new JButton("Attack");
+        heal = new JButton("Heal");
 
         JPanel gameplayTopPanel = new JPanel();
         gameplayTopPanel.setPreferredSize(new Dimension(gameplayPageWidth, (gameplayPageHeight * 11) / 100));
@@ -231,14 +239,14 @@ public class GameSetup extends DisplayMap {
         JPanel gameplayCenterPanel = new JPanel();
         gameplayCenterPanel.setPreferredSize(new Dimension(gameplayPageWidth, (gameplayPageHeight * 71) / 100));
 
-        JPanel mapPanel = new JPanel();
+        mapPanel = new JPanel();
         mapPanel.setPreferredSize(new Dimension(gameplayPageWidth, (gameplayPageHeight * 71) / 100));
         super.printMap(mapPanel);
         super.setVertMove(425);
 
-        JPanel combatPanel = new JPanel();
+        combatPanel = new JPanel();
         combatPanel.setPreferredSize(new Dimension(gameplayPageWidth, (gameplayPageHeight * 71) / 100));
-        JLabel enemyStatsLabel = new JLabel("Enemy Name:  Enemy Health:  Enemy Attack: ");
+        enemyStatsLabel = new JLabel("Enemy Name:  Enemy Health:  Enemy Attack: ");
         enemyStatsLabel.setFont(enemyStatsLabel.getFont().deriveFont(18f));
         enemyStatsLabel.setBounds(260, 450, 100, 30);
         combatPanel.add(enemyStatsLabel);
@@ -254,40 +262,6 @@ public class GameSetup extends DisplayMap {
                     y = y - 100;
                 }
                 x = 0;
-            }
-            super.setVertMove(y);
-            super.setHorisMove(x);
-            mapPanel.validate();
-            mapPanel.repaint();
-        });
-
-        right.addActionListener((ActionEvent e) -> {
-            x = x + 50;
-
-            if (getHorisMove() == 150 && getVertMove() == 425) {
-                enemy = new Demon(150);
-
-                enemyStatsLabel.setText("<html><b>Player Name: </b>" + enemy.getName()
-                        + "<b>&emsp;Health: </b>" + enemy.getHealth()
-                        + " HP<b>&emsp;Attack: </b>" + enemy.getAttack() + " DMG");
-
-                left.setVisible(false);
-                right.setVisible(false);
-
-                attack.setVisible(true);
-                heal.setVisible(true);
-
-                combatPanel.setVisible(true);
-
-                mapPanel.setVisible(false);
-                mapPanel.validate();
-                mapPanel.repaint();
-            } else if (x >= 750) {
-
-                if (y == 425 || y == 225) {
-                    y = y - 100;
-                }
-                x = 725;
             }
             super.setVertMove(y);
             super.setHorisMove(x);
@@ -339,7 +313,60 @@ public class GameSetup extends DisplayMap {
         right.setVisible(true);
         attack.setVisible(false);
         heal.setVisible(false);
+    }
 
+    public Enemy checkForEnemy() {
+
+        enemy = null;
+        x = x + 50;
+
+        if ((getHorisMove() == 150 || getHorisMove() == 450) && getVertMove() == 425) {
+            enemy = new Demon(getHorisMove());
+        } else if (getHorisMove() == 250 && getVertMove() == 325) {
+            enemy = new Spider(getHorisMove());
+        } else if (getHorisMove() == 150 && getVertMove() == 225) {
+            enemy = new Vampire(getHorisMove());
+        } else if (getHorisMove() == 450 && getVertMove() == 125) {
+            enemy = new Giant(getHorisMove());
+        } else if (getHorisMove() == 250 && getVertMove() == 25) {
+            enemy = new OrcBoss();
+        }
+        
+        /*g.drawImage(spider, 350, 350, c);
+        g.drawImage(vampire, 250, 250, c);
+        g.drawImage(giant, 550, 150, c);
+        g.drawImage(orcBoss, 350, 50, c);*/
+
+        if (getEnemy() != null) {
+            enemyStatsLabel.setText("<html><b>Enemy Name: </b>" + getEnemy().getName()
+                    + "<b>&emsp;Health: </b>" + getEnemy().getHealth()
+                    + " HP<b>&emsp;Attack: </b>" + getEnemy().getAttack() + " DMG");
+
+            getLeft().setVisible(false);
+            getRight().setVisible(false);
+
+            getAttack().setVisible(true);
+            getHeal().setVisible(true);
+
+            getCombatPanel().setVisible(true);
+
+            getMapPanel().setVisible(false);
+            getMapPanel().validate();
+            getMapPanel().repaint();
+
+        } else if (x >= 750) {
+
+            if (y == 425 || y == 225) {
+                y = y - 100;
+            }
+            x = 725;
+        }
+        super.setVertMove(y);
+        super.setHorisMove(x);
+        getMapPanel().validate();
+        getMapPanel().repaint();
+
+        return getEnemy();
     }
 
     /**
@@ -439,5 +466,54 @@ public class GameSetup extends DisplayMap {
      */
     public JLabel getStatsLabel() {
         return statsLabel;
+    }
+
+    /**
+     * @return the enemy
+     */
+    public static Enemy getEnemy() {
+        return enemy;
+    }
+
+    /**
+     * @return the left
+     */
+    public JButton getLeft() {
+        return left;
+    }
+
+    /**
+     * @return the right
+     */
+    public JButton getRight() {
+        return right;
+    }
+
+    /**
+     * @return the attack
+     */
+    public JButton getAttack() {
+        return attack;
+    }
+
+    /**
+     * @return the heal
+     */
+    public JButton getHeal() {
+        return heal;
+    }
+
+    /**
+     * @return the combatPanel
+     */
+    public JPanel getCombatPanel() {
+        return combatPanel;
+    }
+
+    /**
+     * @return the mapPanel
+     */
+    public JPanel getMapPanel() {
+        return mapPanel;
     }
 }

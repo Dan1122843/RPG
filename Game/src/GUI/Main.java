@@ -68,7 +68,7 @@ public class Main {
             gui.getDwarfButton().addActionListener((ActionEvent e) -> {
                 gui.getStartPageCharacterButtonsPanel().setVisible(false);
                 gui.getStartPageNamePanel().setVisible(true);
-                GameSetup.setCharacter(1);
+                GameSetup.setCharacter(3);
                 isDwarf = true;
             });
 
@@ -97,6 +97,30 @@ public class Main {
                     timer.startTimer();
                 }
 
+            });
+            
+            gui.getRight().addActionListener((ActionEvent e) -> {
+            
+                Enemy enemy = gui.checkForEnemy();
+                if(enemy != null){
+                    //Call attack method with p1 and enemy
+                }
+            });
+            
+            gui.getLeft().addActionListener((ActionEvent e) -> {
+            
+                Enemy enemy = gui.checkForEnemy();
+                if(enemy != null){
+                    //Call attack method with p1 and enemy
+                }
+            });
+            
+            gui.getAttack().addActionListener((ActionEvent e) -> {
+                //Code for when the player presses attack
+            });
+            
+            gui.getHeal().addActionListener((ActionEvent e) -> {
+                //Code for when the player presses heal
             });
 
         } catch (IOException ex) {
