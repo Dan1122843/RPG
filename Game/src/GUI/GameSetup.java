@@ -34,7 +34,7 @@ public class GameSetup extends DisplayMap {
     private final JLabel enemyStatsLabel;
     private static int character; //used to display the character: warrior = 1, elf = 2, dwarf = 3
     private static Enemy enemy;
-    
+
     private final JButton left;
     private final JButton right;
     private final JButton attack;
@@ -331,12 +331,11 @@ public class GameSetup extends DisplayMap {
         } else if (getHorisMove() == 250 && getVertMove() == 25) {
             enemy = new OrcBoss();
         }
-        
+
         /*g.drawImage(spider, 350, 350, c);
         g.drawImage(vampire, 250, 250, c);
         g.drawImage(giant, 550, 150, c);
         g.drawImage(orcBoss, 350, 50, c);*/
-
         if (getEnemy() != null) {
             enemyStatsLabel.setText("<html><b>Enemy Name: </b>" + getEnemy().getName()
                     + "<b>&emsp;Health: </b>" + getEnemy().getHealth()
