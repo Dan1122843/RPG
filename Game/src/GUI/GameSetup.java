@@ -2,18 +2,17 @@ package GUI;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import javax.imageio.ImageIO;
 import javax.swing.*;
+import rpgCharacters.*;
 
 /**
  *
  * @author liamo
  */
-
 public class GameSetup extends DisplayMap {
 
     private final int startPageWidth;
@@ -33,6 +32,7 @@ public class GameSetup extends DisplayMap {
     private final JPanel actionsPanel;
     private final JLabel statsLabel;
     private static int character; //used to display the character: warrior = 1, elf = 2, dwarf = 3
+    private static Enemy enemy;
 
     public int x = 0; //Used for the x movement
     public int y = 425; //Used for y movement
@@ -176,7 +176,7 @@ public class GameSetup extends DisplayMap {
             startPageCharacterButtonsPanel.setVisible(true);
             startPageCharacterPanel.setVisible(true);
         });
-        
+
         /*
         warriorButton.addActionListener(new ActionListener() {
             @Override
@@ -209,11 +209,10 @@ public class GameSetup extends DisplayMap {
             startPageFrame.setVisible(false);
             gameplayFrame.setVisible(true);
         });
-        */
-
+         */
         int gameplayPageWidth = 800;
         int gameplayPageHeight = 700;
-        
+
         JButton left = new JButton("Move Left");
         JButton right = new JButton("Move Right");
 
@@ -225,32 +224,28 @@ public class GameSetup extends DisplayMap {
         gameplayTopPanel.setPreferredSize(new Dimension(gameplayPageWidth, (gameplayPageHeight * 11) / 100));
         gameplayTopPanel.setBackground(Color.darkGray);
 
-        objectiveLabel = new JLabel("<html>Find your way out of the dungeon. Defeat all the enemies: <br/><br/>Good Luck Player<html/>");
+        objectiveLabel = new JLabel("Find your way out of the dungeon. Defeat all the enemies: ");
         objectiveLabel.setForeground(Color.white);
         gameplayTopPanel.add(objectiveLabel, BorderLayout.CENTER);
 
         JPanel gameplayCenterPanel = new JPanel();
         gameplayCenterPanel.setPreferredSize(new Dimension(gameplayPageWidth, (gameplayPageHeight * 71) / 100));
-        super.printMap(gameplayCenterPanel);
+
+        JPanel mapPanel = new JPanel();
+        mapPanel.setPreferredSize(new Dimension(gameplayPageWidth, (gameplayPageHeight * 71) / 100));
+        super.printMap(mapPanel);
         super.setVertMove(425);
-        
-        JPanel combatPanel = new JPanel(null);
-        gameplayCenterPanel.setPreferredSize(new Dimension(gameplayPageWidth, (gameplayPageHeight * 71) / 100));
-        JLabel playerHealthLabel = new JLabel("Health: ");
-        JLabel playerAttackLabel = new JLabel("Attack: ");
-        JLabel playerPotionLabel = new JLabel("Potions: ");
-        JLabel enemyHealthLabel = new JLabel("Health: ");
-        JLabel enemyAttackLabel = new JLabel("Attack: ");
-        combatPanel.add(playerHealthLabel);
-        combatPanel.add(playerAttackLabel);
-        combatPanel.add(playerPotionLabel);
-        combatPanel.add(enemyHealthLabel);
-        combatPanel.add(enemyAttackLabel);
-        playerHealthLabel.setBounds(260, 450, 100, 30);
-        playerAttackLabel.setBounds(370, 450, 100, 30);
-        playerPotionLabel.setBounds(480, 450, 100, 30);
-        enemyHealthLabel.setBounds(320, 190, 100, 30);
-        enemyAttackLabel.setBounds(420, 190, 100, 30);
+
+        JPanel combatPanel = new JPanel();
+        combatPanel.setPreferredSize(new Dimension(gameplayPageWidth, (gameplayPageHeight * 71) / 100));
+        JLabel enemyStatsLabel = new JLabel("Enemy Name:  Enemy Health:  Enemy Attack: ");
+        enemyStatsLabel.setFont(enemyStatsLabel.getFont().deriveFont(18f));
+        enemyStatsLabel.setBounds(260, 450, 100, 30);
+        combatPanel.add(enemyStatsLabel);
+
+        gameplayCenterPanel.add(mapPanel);
+        gameplayCenterPanel.add(combatPanel);
+        combatPanel.setVisible(false);
 
         left.addActionListener((ActionEvent e) -> {
             x = x - 50;
@@ -262,32 +257,32 @@ public class GameSetup extends DisplayMap {
             }
             super.setVertMove(y);
             super.setHorisMove(x);
-            gameplayCenterPanel.validate();
-            gameplayCenterPanel.repaint();
+            mapPanel.validate();
+            mapPanel.repaint();
         });
 
         right.addActionListener((ActionEvent e) -> {
             x = x + 50;
 
-            if (getHorisMove() == 150 && getVertMove() == 425){
-            
-            left.setEnabled(false);
-            right.setEnabled(false);
-            left.setVisible(false);
-            right.setVisible(false);
-            
-            attack.setEnabled(true);
-            heal.setEnabled(true);
-            attack.setVisible(true);
-            heal.setVisible(true);
-            
-            gameplayFrame.add(combatPanel);
-            
-            gameplayCenterPanel.setVisible(false);            
-            gameplayCenterPanel.validate();
-            gameplayCenterPanel.repaint();
-            }
-            else if (x >= 750) {
+            if (getHorisMove() == 150 && getVertMove() == 425) {
+                enemy = new Demon(150);
+
+                enemyStatsLabel.setText("<html><b>Player Name: </b>" + enemy.getName()
+                        + "<b>&emsp;Health: </b>" + enemy.getHealth()
+                        + " HP<b>&emsp;Attack: </b>" + enemy.getAttack() + " DMG");
+
+                left.setVisible(false);
+                right.setVisible(false);
+
+                attack.setVisible(true);
+                heal.setVisible(true);
+
+                combatPanel.setVisible(true);
+
+                mapPanel.setVisible(false);
+                mapPanel.validate();
+                mapPanel.repaint();
+            } else if (x >= 750) {
 
                 if (y == 425 || y == 225) {
                     y = y - 100;
@@ -296,18 +291,18 @@ public class GameSetup extends DisplayMap {
             }
             super.setVertMove(y);
             super.setHorisMove(x);
-            gameplayCenterPanel.validate();
-            gameplayCenterPanel.repaint();
+            mapPanel.validate();
+            mapPanel.repaint();
         });
-        
-        attack.addActionListener ((ActionEvent e) -> {
-            
+
+        attack.addActionListener((ActionEvent e) -> {
+
         });
-        
-        heal.addActionListener ((ActionEvent e) -> {
-            
+
+        heal.addActionListener((ActionEvent e) -> {
+
         });
-        
+
         statsPanel = new JPanel();
         actionsPanel = new JPanel();
 
@@ -317,17 +312,17 @@ public class GameSetup extends DisplayMap {
         gameplayBottomPanel.setBackground(Color.LIGHT_GRAY);
         JLabel actionLabel = new JLabel("Pick an action");
         actionLabel.setForeground(Color.red);
-        
+
         statsLabel = new JLabel("Player Name:   Health:   Attack:  ");
         statsLabel.setFont(statsLabel.getFont().deriveFont(18f));
-        
+
         actionsPanel.add(actionLabel);
         actionsPanel.add(left);
         actionsPanel.add(right);
         actionsPanel.add(attack);
         actionsPanel.add(heal);
         statsPanel.add(statsLabel);
-        
+
         gameplayBottomPanel.add(statsPanel, BorderLayout.NORTH);
         gameplayBottomPanel.add(actionsPanel);
 
@@ -339,13 +334,9 @@ public class GameSetup extends DisplayMap {
         gameplayFrame.setLocation(dim.width / 2 - gameplayPageWidth / 2, dim.height / 2 - gameplayPageHeight / 2);
         gameplayFrame.setTitle("Role Player Game GUI");
         gameplayFrame.pack();
-        
-        left.setEnabled(true);
-        right.setEnabled(true);
+
         left.setVisible(true);
         right.setVisible(true);
-        attack.setEnabled(false);
-        heal.setEnabled(false);
         attack.setVisible(false);
         heal.setVisible(false);
 
@@ -378,7 +369,7 @@ public class GameSetup extends DisplayMap {
     public JButton getDwarfButton() {
         return dwarfButton;
     }
-    
+
     public static int getCharacter() {
         return character;
     }
