@@ -451,7 +451,7 @@ public class GameSetup extends DisplayMap {
         getQuit().setVisible(true);
     }
 
-    //If teh player won the game, update the display to the game won screen
+    //If the player won the game, update the display to the game won screen
     public void gameWon() {
         getStatsLabel().setText("<html><b>Press Quit to Exit</b></html>");
         getActionLabel().setVisible(false);
