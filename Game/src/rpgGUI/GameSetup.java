@@ -1,4 +1,4 @@
-package GUI;
+package rpgGUI;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -180,7 +180,6 @@ public class GameSetup extends DisplayMap {
         startPageFrame.setLocation(dim.width / 2 - startPageWidth / 2, dim.height / 2 - startPageHeight / 2);
         startPageFrame.setPreferredSize(new Dimension(startPageWidth, startPageHeight));
         startPageFrame.setResizable(false);
-
         startPageFrame.add(startPagePanel);
         startPageFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         startPageFrame.setTitle("Role Player Game GUI");
@@ -261,6 +260,7 @@ public class GameSetup extends DisplayMap {
         gameplayFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         gameplayFrame.setLocation(dim.width / 2 - gameplayPageWidth / 2, dim.height / 2 - gameplayPageHeight / 2);
         gameplayFrame.setTitle("Role Player Game GUI");
+        gameplayFrame.setResizable(false);
         gameplayFrame.pack();
 
         left.setVisible(true);

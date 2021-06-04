@@ -30,14 +30,14 @@ public class FastestTimeDB {
         try {
             //Connect to the Database
             conn = DriverManager.getConnection(url, username, password);
-            System.out.println("Connected");
             
-            //Drop table to remove values
+            //Drop table to remove values (Markers can remove 
             /*
             Statement statement = conn.createStatement();
             String dropTable = "DROP TABLE TIMES";
             statement.executeUpdate(dropTable);
             */
+            
 
         } catch (SQLException ex) {
             Logger.getLogger(FastestTimeDB.class.getName()).log(Level.SEVERE, null, ex);
