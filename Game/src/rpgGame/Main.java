@@ -10,7 +10,7 @@ import rpgCharacters.*;
 import rpgDatabase.*;
 
 /**
- *
+ * Main class runs the game functions
  * @author Liam O'Connor, Daniel Willis, Aidan Lacey ID: 18048495, 19079994,
  * 17994308
  */
