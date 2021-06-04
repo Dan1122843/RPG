@@ -153,10 +153,12 @@ public class Main {
                         // Display the players time
                         timeString += "<br/><br/>Your time was "
                                 + ConvertSecondsToTimeString(currentTime)
-                                + "<br/><br/><br/><br/><br/><br/><br/><br/><br/>"
+                                + "<br/><br/><br/><br/><br/><br/><br/>"
                                 + "&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;"
-                                + "You Defeated the Boss!<br/><br/>&emsp;&emsp;"
-                                + "&emsp;&emsp;&emsp;&emsp;Congratulations!</b></html>";
+                                + "You dealt " + p1.getAttack() + "DMG to the boss."
+                                + "<br/><br/>&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;"
+                                + "You Defeated the Boss!<br/><br/>&emsp;&emsp;&emsp;&emsp;"
+                                + "&emsp;&emsp;Congratulations!</b></html>";
 
                         // Write the players time to the time file
                         database.insertPlayerData(p1.getName(), currentTime);

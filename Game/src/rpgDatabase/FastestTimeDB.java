@@ -32,8 +32,8 @@ public class FastestTimeDB {
             conn = DriverManager.getConnection(url, username, password);
             System.out.println("Connected");
             
+            //Drop table to remove values
             /*
-            * Drop table to remove values
             Statement statement = conn.createStatement();
             String dropTable = "DROP TABLE TIMES";
             statement.executeUpdate(dropTable);
