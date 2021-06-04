@@ -22,6 +22,9 @@ public class Main {
     public static Player p1;
     public static Enemy enemy;
     public static int potionCount = 3;
+    public static String fastestTimeString;
+    public static int fastestTime;
+    public static String fastestName;
 
     /**
      * @param args the command line arguments
@@ -39,9 +42,9 @@ public class Main {
             database.transferFastestTimeData();
 
             //Gets the fastest time from the times file
-            int fastestTime = database.getFastestTime();
-            String FastestName = database.getFastestPlayerName();
-            String fastestTimeString = "There is currently no fastest time. Good luck and be quick!";
+            fastestTime = database.getFastestTime();
+            fastestName = database.getFastestPlayerName();
+            fastestTimeString = "There is currently no fastest time. Good luck and be quick!";
             String fastestPlayerString;
             // If the fastest time is the default set time (Means no times are in the times file)
             if (fastestTime == 1000000) {
@@ -49,7 +52,7 @@ public class Main {
                 // If there is a valid fastest time, display the fastest time
             } else {
                 fastestTimeString = ConvertSecondsToTimeString(fastestTime);
-                fastestPlayerString = "The fastest time to beat is " + fastestTimeString + " set by " + FastestName + ". Do you think you can beat it?";
+                fastestPlayerString = "The fastest time to beat is " + fastestTimeString + " set by " + fastestName + ". Do you think you can beat it?";
             }
 
             gui.getWarriorButton().addActionListener((ActionEvent e) -> {
@@ -102,19 +105,11 @@ public class Main {
             });
 
             gui.getRight().addActionListener((ActionEvent e) -> {
-
                 enemy = gui.checkForEnemy("right");
-                if (enemy != null) {
-                    //Call attack method with p1 and enemy
-                }
             });
 
             gui.getLeft().addActionListener((ActionEvent e) -> {
-
                 enemy = gui.checkForEnemy("left");
-                if (enemy != null) {
-                    //Call attack method with p1 and enemy
-                }
             });
 
             gui.getAttack().addActionListener((ActionEvent e) -> {
@@ -124,74 +119,229 @@ public class Main {
                 gui.getStatsLabel().setText("<html><b>Player Name: </b>" + p1.getName()
                         + "<b>&emsp;Health: </b>" + p1.getHealth() + " HP<b>&emsp;Attack: </b>"
                         + p1.getAttack() + " DMG<b>&emsp;Potions: </b>" + potionCount + "</html>");
-                
+
                 gui.getEnemyStatsLabel().setText("<html><b>Enemy Name: </b>" + enemy.getName()
                         + "<b>&emsp;Health: </b>" + enemy.getHealth()
-                        + " HP<b>&emsp;Attack: </b>" + enemy.getAttack() + " DMG");
-                
+                        + " HP<b>&emsp;Attack: </b>" + enemy.getAttack()
+                        + " DMG<br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>"
+                        + "&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;<b>You deal " + p1.getAttack()
+                        + "DMG to the enemy.<br/><br/>&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;" + enemy.getName()
+                        + " deals " + enemy.getAttack() + "DMG to you.</b></html>");
+
                 if (enemy.getHealth() <= 0) {
-                    if (enemy.getName().equals("OrcBoss")){
+                    if (enemy.getName().equals("OrcBoss")) {
+                        timer.endTimer();
+
+                        // Get the players time in seconds
+                        int currentTime = timer.getSeconds();
+                        String timeString;
+
+                        //If the player set the first valid time
+                        if (currentTime < fastestTime && fastestTime == 1000000) {
+                            timeString = "<html><b>You now hold the fastest time!";
+                            // If the player beat the fastest valid time
+                        } else if (currentTime < fastestTime && fastestTime != 1000000) {
+                            timeString = "<html><b>You now hold the fastest time!<br/> The previous fastest time was " + fastestTimeString + " set by " + fastestName + ".";
+                            // If the player tied with the fastest time
+                        } else if (currentTime == fastestTime) {
+                            timeString = "<html><b>You tied with the fastest time!";
+                            // If the player did not beat the fastest time
+                        } else {
+                            timeString = "<html><b>The all time fastest time was " + fastestTimeString + " set by " + fastestName + ".";
+                        }
+
+                        // Display the players time
+                        timeString += "<br/><br/>Your time was "
+                                + ConvertSecondsToTimeString(currentTime)
+                                + "<br/><br/><br/><br/><br/><br/><br/><br/><br/>"
+                                + "&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;"
+                                + "You Defeated the Boss!<br/><br/>&emsp;&emsp;"
+                                + "&emsp;&emsp;&emsp;&emsp;Congratulations!</b></html>";
+
+                        // Write the players time to the time file
+                        database.insertPlayerData(p1.getName(), currentTime);
+
+                        database.closeConnections();
+
+                        gui.getEnemyStatsLabel().setText(timeString);
                         gui.gameWon();
                     } else {
                         gui.battleWon();
                     }
-                    
+
                 } else if (p1.getHealth() <= 0) {
-                    gui.getStatsLabel().setText("<html><b>You Lost!<br/>You didn't manage to defeat the monsters.</b></html>");
                     gui.battleLost();
                 }
             });
 
             gui.getHeal().addActionListener((ActionEvent e) -> {
                 //Code for when the player presses heal
-                if (isWarrior) {
-                    if (p1.getHealth() != 100) {
-                        if (p1.getHealth() >= 80) {
-                            p1.setHealth(100);
-                            System.out.println("\nYou heal to 100hp");
+                if (potionCount > 0) {
+                    if (isWarrior) {
+                        if (p1.getHealth() != 100) {
+                            potionCount -= 1;
+                            if (potionCount == 1) {
+                                if (p1.getHealth() >= 80) {
+                                    p1.setHealth(100);
+                                    gui.getEnemyStatsLabel().setText("<html><b>Enemy Name: </b>"
+                                            + enemy.getName() + "<b>&emsp;Health: </b>"
+                                            + enemy.getHealth() + " HP<b>&emsp;Attack: </b>"
+                                            + enemy.getAttack() + " DMG" + "<br/><br/><br/><br/>"
+                                            + "<br/><br/><br/><br/><br/><br/>&emsp;&emsp;"
+                                            + "&emsp;&emsp;&emsp;&emsp;<b>You heal to 100HP<br/><br/>&emsp;&emsp;"
+                                            + "&emsp;&emsp;&emsp;&emsp;You now have 1 potion</b></html>");
+                                } else {
+                                    p1.setHealth(p1.getHealth() + 25);
+                                    gui.getEnemyStatsLabel().setText("<html><b>Enemy Name: </b>"
+                                            + enemy.getName() + "<b>&emsp;Health: </b>"
+                                            + enemy.getHealth() + " HP<b>&emsp;Attack: </b>"
+                                            + enemy.getAttack() + " DMG" + "<br/><br/><br/><br/>"
+                                            + "<br/><br/><br/><br/><br/><br/>&emsp;&emsp;"
+                                            + "&emsp;&emsp;&emsp;&emsp;<b>You heal to " + p1.getHealth() + "HP<br/><br/>&emsp;&emsp;"
+                                            + "&emsp;&emsp;&emsp;&emsp;You now have 1 potion</b></html>");
+                                }
+                            } else {
+                                if (p1.getHealth() >= 80) {
+                                    p1.setHealth(100);
+                                    gui.getEnemyStatsLabel().setText("<html><b>Enemy Name: </b>"
+                                            + enemy.getName() + "<b>&emsp;Health: </b>"
+                                            + enemy.getHealth() + " HP<b>&emsp;Attack: </b>"
+                                            + enemy.getAttack() + " DMG" + "<br/><br/><br/><br/>"
+                                            + "<br/><br/><br/><br/><br/><br/>&emsp;&emsp;"
+                                            + "&emsp;&emsp;&emsp;&emsp;<b>You heal to 100HP<br/><br/>&emsp;&emsp;"
+                                            + "&emsp;&emsp;&emsp;&emsp;You now have " + potionCount + " potions</b></html>");
+                                } else {
+                                    p1.setHealth(p1.getHealth() + 25);
+                                    gui.getEnemyStatsLabel().setText("<html><b>Enemy Name: </b>"
+                                            + enemy.getName() + "<b>&emsp;Health: </b>"
+                                            + enemy.getHealth() + " HP<b>&emsp;Attack: </b>"
+                                            + enemy.getAttack() + " DMG" + "<br/><br/><br/><br/>"
+                                            + "<br/><br/><br/><br/><br/><br/>&emsp;&emsp;"
+                                            + "&emsp;&emsp;&emsp;&emsp;<b>You heal to " + p1.getHealth() + "HP<br/><br/>&emsp;&emsp;"
+                                            + "&emsp;&emsp;&emsp;&emsp;You now have " + potionCount + " potions</b></html>");
+                                }
+                            }
                         } else {
-                            p1.setHealth(p1.getHealth() + 25);
-                            System.out.println("\nYou heal to " + p1.getHealth() + "hp");
+                            gui.getEnemyStatsLabel().setText("<html><b>Enemy Name: </b>"
+                                    + enemy.getName() + "<b>&emsp;Health: </b>"
+                                    + enemy.getHealth() + " HP<b>&emsp;Attack: </b>"
+                                    + enemy.getAttack() + " DMG" + "<br/><br/><br/><br/>"
+                                    + "<br/><br/><br/><br/><br/><br/>&emsp;&emsp;"
+                                    + "&emsp;&emsp;&emsp;&emsp;<b>You are already at max health</b></html>");
                         }
-
-                        potionCount -= 1;
-                        System.out.println("\nYou now have " + potionCount + " potions");
-                    } else {
-                        System.out.println("\nYou are already at max health");
                     }
-                }
-                if (isDwarf) {
-                    if (p1.getHealth() != 125) {
-                        if (p1.getHealth() >= 100) {
-                            p1.setHealth(125);
-                            System.out.println("\nYou heal to 125hp");
+                    if (isDwarf) {
+                        if (p1.getHealth() != 125) {
+                            potionCount -= 1;
+                            if (potionCount == 1) {
+                                if (p1.getHealth() >= 100) {
+                                    p1.setHealth(125);
+                                    gui.getEnemyStatsLabel().setText("<html><b>Enemy Name: </b>"
+                                            + enemy.getName() + "<b>&emsp;Health: </b>"
+                                            + enemy.getHealth() + " HP<b>&emsp;Attack: </b>"
+                                            + enemy.getAttack() + " DMG" + "<br/><br/><br/><br/>"
+                                            + "<br/><br/><br/><br/><br/><br/>&emsp;&emsp;"
+                                            + "&emsp;&emsp;&emsp;&emsp;<b>You heal to 125HP<br/><br/>&emsp;&emsp;"
+                                            + "&emsp;&emsp;&emsp;&emsp;You now have 1 potion</b></html>");
+                                } else {
+                                    p1.setHealth(p1.getHealth() + 25);
+                                    gui.getEnemyStatsLabel().setText("<html><b>Enemy Name: </b>"
+                                            + enemy.getName() + "<b>&emsp;Health: </b>"
+                                            + enemy.getHealth() + " HP<b>&emsp;Attack: </b>"
+                                            + enemy.getAttack() + " DMG" + "<br/><br/><br/><br/>"
+                                            + "<br/><br/><br/><br/><br/><br/>&emsp;&emsp;"
+                                            + "&emsp;&emsp;&emsp;&emsp;<b>You heal to " + p1.getHealth() + "HP<br/><br/>&emsp;&emsp;"
+                                            + "&emsp;&emsp;&emsp;&emsp;You now have 1 potion</b></html>");
+                                }
+                            } else {
+                                if (p1.getHealth() >= 100) {
+                                    p1.setHealth(125);
+                                    gui.getEnemyStatsLabel().setText("<html><b>Enemy Name: </b>"
+                                            + enemy.getName() + "<b>&emsp;Health: </b>"
+                                            + enemy.getHealth() + " HP<b>&emsp;Attack: </b>"
+                                            + enemy.getAttack() + " DMG" + "<br/><br/><br/><br/>"
+                                            + "<br/><br/><br/><br/><br/><br/>&emsp;&emsp;"
+                                            + "&emsp;&emsp;&emsp;&emsp;<b>You heal to 125HP<br/><br/>&emsp;&emsp;"
+                                            + "&emsp;&emsp;&emsp;&emsp;You now have " + potionCount + " potions</b></html>");
+                                } else {
+                                    p1.setHealth(p1.getHealth() + 25);
+                                    gui.getEnemyStatsLabel().setText("<html><b>Enemy Name: </b>"
+                                            + enemy.getName() + "<b>&emsp;Health: </b>"
+                                            + enemy.getHealth() + " HP<b>&emsp;Attack: </b>"
+                                            + enemy.getAttack() + " DMG" + "<br/><br/><br/><br/>"
+                                            + "<br/><br/><br/><br/><br/><br/>&emsp;&emsp;"
+                                            + "&emsp;&emsp;&emsp;&emsp;<b>You heal to " + p1.getHealth() + "HP<br/><br/>&emsp;&emsp;"
+                                            + "&emsp;&emsp;&emsp;&emsp;You now have " + potionCount + " potions</b></html>");
+                                }
+                            }
                         } else {
-                            p1.setHealth(p1.getHealth() + 25);
-                            System.out.println("\nYou heal to " + p1.getHealth() + "hp");
+                            gui.getEnemyStatsLabel().setText("<html><b>Enemy Name: </b>"
+                                    + enemy.getName() + "<b>&emsp;Health: </b>"
+                                    + enemy.getHealth() + " HP<b>&emsp;Attack: </b>"
+                                    + enemy.getAttack() + " DMG" + "<br/><br/><br/><br/>"
+                                    + "<br/><br/><br/><br/><br/><br/>&emsp;&emsp;"
+                                    + "&emsp;&emsp;&emsp;&emsp;<b>You are already at max health</b></html>");
                         }
-
-                        potionCount -= 1;
-                        System.out.println("\nYou now have " + potionCount + " potions");
-                    } else {
-                        System.out.println("\nYou are already at max health");
                     }
-                }
-                if (isElf) {
-                    if (p1.getHealth() != 75) {
-                        if (p1.getHealth() >= 50) {
-                            p1.setHealth(75);
-                            System.out.println("\nYou heal to 75hp");
+                    if (isElf) {
+                        if (p1.getHealth() != 75) {
+                            potionCount -= 1;
+                            if (potionCount == 1) {
+                                if (p1.getHealth() >= 50) {
+                                    p1.setHealth(75);
+                                    gui.getEnemyStatsLabel().setText("<html><b>Enemy Name: </b>"
+                                            + enemy.getName() + "<b>&emsp;Health: </b>"
+                                            + enemy.getHealth() + " HP<b>&emsp;Attack: </b>"
+                                            + enemy.getAttack() + " DMG" + "<br/><br/><br/><br/>"
+                                            + "<br/><br/><br/><br/><br/><br/>&emsp;&emsp;"
+                                            + "&emsp;&emsp;&emsp;&emsp;<b>You heal to 75HP<br/><br/>&emsp;&emsp;"
+                                            + "&emsp;&emsp;&emsp;&emsp;You now have 1 potion</b></html>");
+                                } else {
+                                    p1.setHealth(p1.getHealth() + 25);
+                                    gui.getEnemyStatsLabel().setText("<html><b>Enemy Name: </b>"
+                                            + enemy.getName() + "<b>&emsp;Health: </b>"
+                                            + enemy.getHealth() + " HP<b>&emsp;Attack: </b>"
+                                            + enemy.getAttack() + " DMG" + "<br/><br/><br/><br/>"
+                                            + "<br/><br/><br/><br/><br/><br/>&emsp;&emsp;"
+                                            + "&emsp;&emsp;&emsp;&emsp;<b>You heal to " + p1.getHealth() + "HP<br/><br/>&emsp;&emsp;"
+                                            + "&emsp;&emsp;&emsp;&emsp;You now have 1 potion</b></html>");
+                                }
+                            } else {
+                                if (p1.getHealth() >= 50) {
+                                    p1.setHealth(75);
+                                    gui.getEnemyStatsLabel().setText("<html><b>Enemy Name: </b>"
+                                            + enemy.getName() + "<b>&emsp;Health: </b>"
+                                            + enemy.getHealth() + " HP<b>&emsp;Attack: </b>"
+                                            + enemy.getAttack() + " DMG" + "<br/><br/><br/><br/>"
+                                            + "<br/><br/><br/><br/><br/><br/>&emsp;&emsp;"
+                                            + "&emsp;&emsp;&emsp;&emsp;<b>You heal to 75HP<br/><br/>&emsp;&emsp;"
+                                            + "&emsp;&emsp;&emsp;&emsp;You now have " + potionCount + " potions</b></html>");
+                                } else {
+                                    p1.setHealth(p1.getHealth() + 25);
+                                    gui.getEnemyStatsLabel().setText("<html><b>Enemy Name: </b>"
+                                            + enemy.getName() + "<b>&emsp;Health: </b>"
+                                            + enemy.getHealth() + " HP<b>&emsp;Attack: </b>"
+                                            + enemy.getAttack() + " DMG" + "<br/><br/><br/><br/>"
+                                            + "<br/><br/><br/><br/><br/><br/>&emsp;&emsp;"
+                                            + "&emsp;&emsp;&emsp;&emsp;<b>You heal to " + p1.getHealth() + "HP<br/><br/>&emsp;&emsp;"
+                                            + "&emsp;&emsp;&emsp;&emsp;You now have " + potionCount + " potions</b></html>");
+                                }
+                            }
                         } else {
-                            p1.setHealth(p1.getHealth() + 25);
-                            System.out.println("\nYou heal to " + p1.getHealth() + "hp");
+                            gui.getEnemyStatsLabel().setText("<html><b>Enemy Name: </b>"
+                                    + enemy.getName() + "<b>&emsp;Health: </b>"
+                                    + enemy.getHealth() + " HP<b>&emsp;Attack: </b>"
+                                    + enemy.getAttack() + " DMG" + "<br/><br/><br/><br/>"
+                                    + "<br/><br/><br/><br/><br/><br/>&emsp;&emsp;"
+                                    + "&emsp;&emsp;&emsp;&emsp;<b>You are already at max health</b></html>");
                         }
-
-                        potionCount -= 1;
-                        System.out.println("\nYou now have " + potionCount + " potions");
-                    } else {
-                        System.out.println("\nYou are already at max health");
                     }
+
+                    gui.getStatsLabel().setText("<html><b>Player Name: </b>" + p1.getName()
+                            + "<b>&emsp;Health: </b>" + p1.getHealth() + " HP<b>&emsp;Attack: </b>"
+                            + p1.getAttack() + " DMG<b>&emsp;Potions: </b>" + potionCount + "</html>");
                 }
+
             });
 
         } catch (IOException ex) {

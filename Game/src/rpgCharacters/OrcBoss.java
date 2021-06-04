@@ -8,7 +8,7 @@ package rpgCharacters;
 public class OrcBoss extends Enemy {
     
     public OrcBoss() {
-        super("OrcBoss", 70, 18, 100, 17, 1);
+        super("OrcBoss", 70, 12, 100, 17, 1);
     }
     
 }

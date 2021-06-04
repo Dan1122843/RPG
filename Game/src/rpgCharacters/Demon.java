@@ -8,7 +8,7 @@ package rpgCharacters;
 public class Demon extends Enemy {
     
     public Demon(int xPosition) {
-        super("Demon", 20, 5, 10, xPosition, 5);
+        super("Demon", 20, 2, 10, xPosition, 5);
     }
     
 }
