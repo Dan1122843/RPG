@@ -8,7 +8,7 @@ package rpgCharacters;
 public class Spider extends Enemy {
     
     public Spider(int xPosition) {
-        super("Spider", 30, 8, 20, xPosition, 4);
+        super("Spider", 30, 4, 20, xPosition, 4);
     }
     
 }

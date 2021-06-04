@@ -34,6 +34,7 @@ public class GameSetup extends DisplayMap {
     private final JPanel actionsPanel;
     private final JLabel statsLabel;
     private final JLabel enemyStatsLabel;
+    private final JLabel actionLabel;
     private static int character; //used to display the character: warrior = 1, elf = 2, dwarf = 3
     private static Enemy enemy;
 
@@ -47,6 +48,11 @@ public class GameSetup extends DisplayMap {
 
     public int x = 0; //Used for the x movement
     public int y = 425; //Used for y movement
+    public boolean demon1Dead = false;
+    public boolean demon2Dead = false;
+    public boolean spiderDead = false;
+    public boolean vampireDead = false;
+    public boolean giantDead = false;
 
     public GameSetup() throws IOException {
         super();
@@ -114,9 +120,9 @@ public class GameSetup extends DisplayMap {
 
         JLabel instructions = new JLabel("<html><br/><b>How to Play:</b><br/><br/>The aim of the game is to reach the top of the cave "
                 + "by defeating the enemies that cross your path.<br/>Reach the other end of each stage to progress to the next level. "
-                + "<br/><br/><br/><b>Each enemies icon, health points and damage stats are the "
-                + "following:</b><br/><br/>Demon: &ensp;<b>D - 20HP - 5DMG</b><br/>Spider: &emsp;<b>S - 30HP - 8DMG</b><br/>Vampire: "
-                + "<b>V - 50HP - 15DMG</b><br/>Giant: &ensp;&emsp;<b>G - 70HP - 12DMG</b><br/>Orc Boss: <b>0 - 70HP - 18DMG</b><br/><br/>Have Fun! :)</html>s");
+                + "<br/><br/><br/><b>Each enemies health points and damage stats are the "
+                + "following:</b><br/><br/>Demon: &ensp;<b>20HP - 2DMG</b><br/>Spider: &emsp;<b>30HP - 4DMG</b><br/>Vampire: "
+                + "<b>50HP - 6DMG</b><br/>Giant: &ensp;&emsp;<b>70HP - 8DMG</b><br/>Orc Boss: <b>70HP - 12DMG</b><br/><br/>Have Fun! :)</html>s");
         instructions.setFont(instructions.getFont().deriveFont(14f));
 
         startPageInstructionsPanel.add(instructions, BorderLayout.NORTH);
@@ -188,39 +194,6 @@ public class GameSetup extends DisplayMap {
             startPageCharacterPanel.setVisible(true);
         });
 
-        /*
-        warriorButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                getStartPageCharacterButtonsPanel().setVisible(false);
-                getStartPageNamePanel().setVisible(true);
-                setCharacter(1);
-            }
-        });
-
-        elfButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                getStartPageCharacterButtonsPanel().setVisible(false);
-                getStartPageNamePanel().setVisible(true);
-                setCharacter(2);
-            }
-        });
-
-        dwarfButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                getStartPageCharacterButtonsPanel().setVisible(false);
-                getStartPageNamePanel().setVisible(true);
-                setCharacter(3);
-            }
-        });
-
-        enterButton.addActionListener((ActionEvent e) -> {
-            startPageFrame.setVisible(false);
-            gameplayFrame.setVisible(true);
-        });
-         */
         int gameplayPageWidth = 800;
         int gameplayPageHeight = 700;
 
@@ -264,7 +237,7 @@ public class GameSetup extends DisplayMap {
         gameplayBottomPanel.setLayout(new BorderLayout());
         gameplayBottomPanel.setPreferredSize(new Dimension(gameplayPageWidth, (gameplayPageHeight * 17) / 100));
         gameplayBottomPanel.setBackground(Color.LIGHT_GRAY);
-        JLabel actionLabel = new JLabel("Pick an action");
+        actionLabel = new JLabel("Pick an action");
         actionLabel.setForeground(Color.red);
 
         statsLabel = new JLabel("Player Name:   Health:   Attack:  ");
@@ -297,7 +270,7 @@ public class GameSetup extends DisplayMap {
         quit.setVisible(false);
 
         quit.addActionListener((ActionEvent e) -> {
-            gameplayFrame.dispose();
+            System.exit(0);
         });
 
     }
@@ -309,22 +282,24 @@ public class GameSetup extends DisplayMap {
         if (direction.equals("right")) {
             x = x + 50;
 
-            if ((getHorisMove() == 150 || getHorisMove() == 450) && getVertMove() == 425) {
+            if ((getHorisMove() == 150 && getVertMove() == 425) && demon1Dead == false) {
                 enemy = new Demon(getHorisMove());
-            } else if (getHorisMove() == 250 && getVertMove() == 325) {
-                enemy = new Spider(getHorisMove());
-            } else if (getHorisMove() == 150 && getVertMove() == 225) {
+            } else if ((getHorisMove() == 450 && getVertMove() == 425) && demon2Dead == false) {
+                enemy = new Demon(getHorisMove());
+            } else if ((getHorisMove() == 150 && getVertMove() == 225) && vampireDead == false) {
                 enemy = new Vampire(getHorisMove());
-            } else if (getHorisMove() == 450 && getVertMove() == 125) {
-                enemy = new Giant(getHorisMove());
             } else if (getHorisMove() == 250 && getVertMove() == 25) {
                 enemy = new OrcBoss();
             }
 
             if (getEnemy() != null) {
-                getEnemyStatsLabel().setText("<html><b>Enemy Name: </b>" + getEnemy().getName()
-                        + "<b>&emsp;Health: </b>" + getEnemy().getHealth()
-                        + " HP<b>&emsp;Attack: </b>" + getEnemy().getAttack() + " DMG");
+                getEnemyStatsLabel().setText("<html><b>Enemy Name: </b>"
+                        + getEnemy().getName() + "<b>&emsp;Health: </b>"
+                        + getEnemy().getHealth() + " HP<b>&emsp;Attack: </b>"
+                        + getEnemy().getAttack() + " DMG" + "<br/><br/><br/><br/>"
+                        + "<br/><br/><br/><br/><br/><br/>&emsp;&emsp;"
+                        + "&emsp;&emsp;&emsp;&emsp;<b>You encounter a "
+                        + enemy.getName() + "</b></html>");
 
                 getLeft().setVisible(false);
                 getRight().setVisible(false);
@@ -349,22 +324,20 @@ public class GameSetup extends DisplayMap {
         if (direction.equals("left")) {
             x = x - 50;
 
-            if ((getHorisMove() == 150 || getHorisMove() == 450) && getVertMove() == 425) {
-                enemy = new Demon(getHorisMove());
-            } else if (getHorisMove() == 250 && getVertMove() == 325) {
+            if ((getHorisMove() == 425 && getVertMove() == 325) && spiderDead == false) {
                 enemy = new Spider(getHorisMove());
-            } else if (getHorisMove() == 150 && getVertMove() == 225) {
-                enemy = new Vampire(getHorisMove());
-            } else if (getHorisMove() == 450 && getVertMove() == 125) {
+            } else if ((getHorisMove() == 625 && getVertMove() == 125) && giantDead == false) {
                 enemy = new Giant(getHorisMove());
-            } else if (getHorisMove() == 250 && getVertMove() == 25) {
-                enemy = new OrcBoss();
             }
 
             if (getEnemy() != null) {
-                getEnemyStatsLabel().setText("<html><b>Enemy Name: </b>" + getEnemy().getName()
-                        + "<b>&emsp;Health: </b>" + getEnemy().getHealth()
-                        + " HP<b>&emsp;Attack: </b>" + getEnemy().getAttack() + " DMG");
+                getEnemyStatsLabel().setText("<html><b>Enemy Name: </b>"
+                        + getEnemy().getName() + "<b>&emsp;Health: </b>"
+                        + getEnemy().getHealth() + " HP<b>&emsp;Attack: </b>"
+                        + getEnemy().getAttack() + " DMG" + "<br/><br/><br/><br/>"
+                        + "<br/><br/><br/><br/><br/><br/>&emsp;&emsp;"
+                        + "&emsp;&emsp;&emsp;&emsp;<b>You encounter a "
+                        + enemy.getName() + "</b></html>");
 
                 getLeft().setVisible(false);
                 getRight().setVisible(false);
@@ -394,6 +367,18 @@ public class GameSetup extends DisplayMap {
     }
 
     public void battleWon() {
+        if (enemy.getName().equals("Demon") && enemy.getxPosition() == 150) {
+            demon1Dead = true;
+        } else if (enemy.getName().equals("Demon") && enemy.getxPosition() == 450) {
+            demon2Dead = true;
+        } else if (enemy.getName().equals("Spider")) {
+            spiderDead = true;
+        } else if (enemy.getName().equals("Vampire")) {
+            vampireDead = true;
+        } else if (enemy.getName().equals("Giant")) {
+            giantDead = true;
+        }
+
         getLeft().setVisible(true);
         getRight().setVisible(true);
 
@@ -413,13 +398,19 @@ public class GameSetup extends DisplayMap {
     }
 
     public void battleLost() {
+        getStatsLabel().setText("<html><b>You Lost!<br/>You didn't manage to defeat the monsters.</b></html>");
+        getActionLabel().setVisible(false);
         getAttack().setVisible(false);
         getHeal().setVisible(false);
         getQuit().setVisible(true);
     }
 
     public void gameWon() {
-        //Game winning code
+        getStatsLabel().setText("<html><b>Press Quit to Exit</b></html>");
+        getActionLabel().setVisible(false);
+        getAttack().setVisible(false);
+        getHeal().setVisible(false);
+        getQuit().setVisible(true);
     }
 
     /**
@@ -582,5 +573,12 @@ public class GameSetup extends DisplayMap {
      */
     public JButton getQuit() {
         return quit;
+    }
+
+    /**
+     * @return the actionLabel
+     */
+    public JLabel getActionLabel() {
+        return actionLabel;
     }
 }
