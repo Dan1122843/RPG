@@ -1,22 +1,22 @@
-package GUI;
+package rpgGUI;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import rpgCharacters.*;
 
 /**
- *
- * @author liamo
+ * GameSetup class creates the GUI elements for the game
+ * @author Liam O'Connor, Daniel Willis, Aidan Lacey ID: 18048495, 19079994,
+ * 17994308
  */
 public class GameSetup extends DisplayMap {
 
+    //Create attributes for class and main class to use and access
     private final int startPageWidth;
     private final int startPageHeight;
     private final JTextField nameTextBox;
@@ -59,6 +59,7 @@ public class GameSetup extends DisplayMap {
         startPageWidth = 700;
         startPageHeight = 700;
 
+        //Create the components for the starting page
         JLabel welcomeLabel = new JLabel("Welcome to the RPG Game GUI");
         welcomeLabel.setHorizontalAlignment(JLabel.CENTER);
         welcomeLabel.setForeground(Color.white);
@@ -76,12 +77,9 @@ public class GameSetup extends DisplayMap {
         startPageTopPanel.setPreferredSize(new Dimension(startPageWidth, (startPageHeight * 45) / 100));
         startPageTopPanel.add(mountainsImage);
 
+        //Create the components for the character creation
         JLabel characterLabel = new JLabel("Choose your Character: ");
         characterLabel.setForeground(Color.white);
-
-        nameTextBox = new JTextField(10);
-
-        enterButton = new JButton("Enter");
 
         JButton startButton = new JButton("Start");
         warriorButton = new JButton("Warrior");
@@ -90,21 +88,28 @@ public class GameSetup extends DisplayMap {
 
         nameLabel = new JLabel("Enter your hero's name: ");
         nameLabel.setForeground(Color.white);
+        
+        nameTextBox = new JTextField(10);
+        enterButton = new JButton("Enter");
 
+        //Create start page panel to add components to
         JPanel startPageStartPanel = new JPanel();
         startPageStartPanel.setBackground(Color.black);
         startPageStartPanel.setPreferredSize(new Dimension(startPageWidth, (startPageHeight * 6) / 100));
 
+        //Create start page character buttons panel to add components to
         startPageCharacterButtonsPanel = new JPanel();
         startPageCharacterButtonsPanel.setBackground(Color.black);
         startPageCharacterButtonsPanel.setVisible(false);
         startPageCharacterButtonsPanel.setPreferredSize(new Dimension(startPageWidth, (startPageHeight * 6) / 100));
 
+        //Create start page name panel to add components to
         startPageNamePanel = new JPanel();
         startPageNamePanel.setBackground(Color.black);
         startPageNamePanel.setVisible(false);
         startPageNamePanel.setPreferredSize(new Dimension(startPageWidth, (startPageHeight * 6) / 100));
 
+        //Add all the components to the panels 
         startPageStartPanel.add(startButton);
         startPageCharacterButtonsPanel.add(characterLabel);
         startPageCharacterButtonsPanel.add(warriorButton);
@@ -114,6 +119,7 @@ public class GameSetup extends DisplayMap {
         startPageNamePanel.add(nameTextBox);
         startPageNamePanel.add(enterButton);
 
+        //Create the instructions panel and label
         JPanel startPageInstructionsPanel = new JPanel();
         startPageInstructionsPanel.setBackground(Color.LIGHT_GRAY);
         startPageInstructionsPanel.setPreferredSize(new Dimension(startPageWidth, (startPageHeight * 45) / 100));
@@ -125,12 +131,15 @@ public class GameSetup extends DisplayMap {
                 + "<b>50HP - 6DMG</b><br/>Giant: &ensp;&emsp;<b>70HP - 8DMG</b><br/>Orc Boss: <b>70HP - 12DMG</b><br/><br/>Have Fun! :)</html>s");
         instructions.setFont(instructions.getFont().deriveFont(14f));
 
+        //Add components to instructions panel
         startPageInstructionsPanel.add(instructions, BorderLayout.NORTH);
 
+        //Create character panel
         JPanel startPageCharacterPanel = new JPanel();
         startPageCharacterPanel.setBackground(Color.LIGHT_GRAY);
         startPageCharacterPanel.setPreferredSize(new Dimension(startPageWidth, (startPageHeight * 45) / 100));
 
+        //Create character subpanels to display class stats
         JPanel WarriorPanel = new JPanel();
         WarriorPanel.setBackground(Color.LIGHT_GRAY);
         WarriorPanel.setPreferredSize(new Dimension((startPageWidth * 32) / 100, 300));
@@ -161,11 +170,13 @@ public class GameSetup extends DisplayMap {
         DwarfPanel.add(DwarfStats, BorderLayout.NORTH);
         DwarfPanel.add(DwarfImage, BorderLayout.SOUTH);
 
+        //Add the character sub panels to the character panel
         startPageCharacterPanel.add(WarriorPanel, BorderLayout.WEST);
         startPageCharacterPanel.add(ElfPanel, BorderLayout.CENTER);
         startPageCharacterPanel.add(DwarfPanel, BorderLayout.EAST);
         startPageCharacterPanel.setVisible(false);
 
+        //Add the panels to the whole frame panel
         JPanel startPagePanel = new JPanel();
         startPagePanel.setBackground(Color.black);
         startPagePanel.add(startPageTopPanel, BorderLayout.NORTH);
@@ -175,18 +186,19 @@ public class GameSetup extends DisplayMap {
         startPagePanel.add(startPageInstructionsPanel, BorderLayout.SOUTH);
         startPagePanel.add(startPageCharacterPanel, BorderLayout.SOUTH);
 
+        //Create the frame and add starting panel to frame
         startPageFrame = new JFrame();
         Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
         startPageFrame.setLocation(dim.width / 2 - startPageWidth / 2, dim.height / 2 - startPageHeight / 2);
         startPageFrame.setPreferredSize(new Dimension(startPageWidth, startPageHeight));
         startPageFrame.setResizable(false);
-
         startPageFrame.add(startPagePanel);
         startPageFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         startPageFrame.setTitle("Role Player Game GUI");
         startPageFrame.pack();
         startPageFrame.setVisible(true);
 
+        //When the start button is pressed, progress through the GUI
         startButton.addActionListener((ActionEvent e) -> {
             startPageStartPanel.setVisible(false);
             startPageInstructionsPanel.setVisible(false);
@@ -197,12 +209,14 @@ public class GameSetup extends DisplayMap {
         int gameplayPageWidth = 800;
         int gameplayPageHeight = 700;
 
+        //Create the gameplay buttons
         left = new JButton("Move Left");
         right = new JButton("Move Right");
         attack = new JButton("Attack");
         heal = new JButton("Heal");
         quit = new JButton("Quit");
 
+        //Create the gameplay panels and their components
         JPanel gameplayTopPanel = new JPanel();
         gameplayTopPanel.setPreferredSize(new Dimension(gameplayPageWidth, (gameplayPageHeight * 11) / 100));
         gameplayTopPanel.setBackground(Color.darkGray);
@@ -214,11 +228,13 @@ public class GameSetup extends DisplayMap {
         JPanel gameplayCenterPanel = new JPanel();
         gameplayCenterPanel.setPreferredSize(new Dimension(gameplayPageWidth, (gameplayPageHeight * 71) / 100));
 
+        //Create and display the map
         mapPanel = new JPanel();
         mapPanel.setPreferredSize(new Dimension(gameplayPageWidth, (gameplayPageHeight * 71) / 100));
         super.printMap(mapPanel);
         super.setVertMove(425);
 
+        //Create the combat panel and components
         combatPanel = new JPanel();
         combatPanel.setPreferredSize(new Dimension(gameplayPageWidth, (gameplayPageHeight * 71) / 100));
         enemyStatsLabel = new JLabel("Enemy Name:  Enemy Health:  Enemy Attack: ");
@@ -233,6 +249,7 @@ public class GameSetup extends DisplayMap {
         statsPanel = new JPanel();
         actionsPanel = new JPanel();
 
+        //Create the bottom portion panel and it's components
         JPanel gameplayBottomPanel = new JPanel();
         gameplayBottomPanel.setLayout(new BorderLayout());
         gameplayBottomPanel.setPreferredSize(new Dimension(gameplayPageWidth, (gameplayPageHeight * 17) / 100));
@@ -243,6 +260,7 @@ public class GameSetup extends DisplayMap {
         statsLabel = new JLabel("Player Name:   Health:   Attack:  ");
         statsLabel.setFont(statsLabel.getFont().deriveFont(18f));
 
+        //Add the actions components to the actions panel
         actionsPanel.add(actionLabel);
         actionsPanel.add(left);
         actionsPanel.add(right);
@@ -251,9 +269,11 @@ public class GameSetup extends DisplayMap {
         actionsPanel.add(quit);
         statsPanel.add(statsLabel);
 
+        //Add the stats and actions panels to the bottom panel
         gameplayBottomPanel.add(statsPanel, BorderLayout.NORTH);
         gameplayBottomPanel.add(actionsPanel);
 
+        //Create the gameplay frame and add the panels
         gameplayFrame = new JFrame();
         gameplayFrame.add(gameplayTopPanel, BorderLayout.NORTH);
         gameplayFrame.add(gameplayCenterPanel, BorderLayout.CENTER);
@@ -261,27 +281,37 @@ public class GameSetup extends DisplayMap {
         gameplayFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         gameplayFrame.setLocation(dim.width / 2 - gameplayPageWidth / 2, dim.height / 2 - gameplayPageHeight / 2);
         gameplayFrame.setTitle("Role Player Game GUI");
+        gameplayFrame.setResizable(false);
         gameplayFrame.pack();
 
+        //Set the movement buttons as visible and the attacking ones as false
         left.setVisible(true);
         right.setVisible(true);
         attack.setVisible(false);
         heal.setVisible(false);
         quit.setVisible(false);
 
+        //When the user presses the quit button, terminate the program
         quit.addActionListener((ActionEvent e) -> {
             System.exit(0);
         });
 
     }
 
+    /**
+     * Check the map to see if the player has hit an enemy
+     * @param direction String representing the players direction
+     * @return Returns an enemy object
+     */
     public Enemy checkForEnemy(String direction) {
 
         enemy = null;
 
+        //If the player is going right, change their x coordinate
         if (direction.equals("right")) {
             x = x + 50;
 
+            //If the players coordinates match that of an enemies, create an enemy object
             if ((getHorisMove() == 150 && getVertMove() == 425) && demon1Dead == false) {
                 enemy = new Demon(getHorisMove());
             } else if ((getHorisMove() == 450 && getVertMove() == 425) && demon2Dead == false) {
@@ -292,6 +322,7 @@ public class GameSetup extends DisplayMap {
                 enemy = new OrcBoss();
             }
 
+            //If there is an enemy, update the enemy stats label
             if (getEnemy() != null) {
                 getEnemyStatsLabel().setText("<html><b>Enemy Name: </b>"
                         + getEnemy().getName() + "<b>&emsp;Health: </b>"
@@ -301,6 +332,7 @@ public class GameSetup extends DisplayMap {
                         + "&emsp;&emsp;&emsp;&emsp;<b>You encounter a "
                         + enemy.getName() + "</b></html>");
 
+                //Change the users display from the map display to the combat display
                 getLeft().setVisible(false);
                 getRight().setVisible(false);
 
@@ -313,23 +345,27 @@ public class GameSetup extends DisplayMap {
                 getMapPanel().validate();
                 getMapPanel().repaint();
 
+            
             } else if (x >= 750) {
-
+                //If the user has reached a tunnel, put them up a level
                 if (y == 425 || y == 225) {
                     y = y - 100;
                 }
                 x = 725;
             }
         }
+        //If the player is going left, change their x coordinate
         if (direction.equals("left")) {
             x = x - 50;
 
+            //If the players coordinates match that of an enemies, create an enemy object
             if ((getHorisMove() == 425 && getVertMove() == 325) && spiderDead == false) {
                 enemy = new Spider(getHorisMove());
             } else if ((getHorisMove() == 625 && getVertMove() == 125) && giantDead == false) {
                 enemy = new Giant(getHorisMove());
             }
 
+            //If there is an enemy, update the enemy stats label
             if (getEnemy() != null) {
                 getEnemyStatsLabel().setText("<html><b>Enemy Name: </b>"
                         + getEnemy().getName() + "<b>&emsp;Health: </b>"
@@ -339,6 +375,7 @@ public class GameSetup extends DisplayMap {
                         + "&emsp;&emsp;&emsp;&emsp;<b>You encounter a "
                         + enemy.getName() + "</b></html>");
 
+                //Change the users display from the map display to the combat display
                 getLeft().setVisible(false);
                 getRight().setVisible(false);
 
@@ -352,12 +389,14 @@ public class GameSetup extends DisplayMap {
                 getMapPanel().repaint();
 
             } else if (x <= 0) {
+                //If the user has reached a tunnel, put them up a level
                 if (y == 325 || y == 125) {
                     y = y - 100;
                 }
                 x = 0;
             }
         }
+        //Update the map
         super.setVertMove(y);
         super.setHorisMove(x);
         getMapPanel().validate();
@@ -366,7 +405,11 @@ public class GameSetup extends DisplayMap {
         return getEnemy();
     }
 
+    /**
+     * If the player won a battle
+     */
     public void battleWon() {
+        //Set the enemy as dead
         if (enemy.getName().equals("Demon") && enemy.getxPosition() == 150) {
             demon1Dead = true;
         } else if (enemy.getName().equals("Demon") && enemy.getxPosition() == 450) {
@@ -379,6 +422,7 @@ public class GameSetup extends DisplayMap {
             giantDead = true;
         }
 
+        //Change the users display back to the map panel
         getLeft().setVisible(true);
         getRight().setVisible(true);
 
@@ -391,12 +435,14 @@ public class GameSetup extends DisplayMap {
         getMapPanel().validate();
         getMapPanel().repaint();
 
+        //Update the map
         super.setVertMove(y);
         super.setHorisMove(x);
         getMapPanel().validate();
         getMapPanel().repaint();
     }
 
+    //If the player lost, update the display to the game lost screen
     public void battleLost() {
         getStatsLabel().setText("<html><b>You Lost!<br/>You didn't manage to defeat the monsters.</b></html>");
         getActionLabel().setVisible(false);
@@ -405,6 +451,7 @@ public class GameSetup extends DisplayMap {
         getQuit().setVisible(true);
     }
 
+    //If teh player won the game, update the display to the game won screen
     public void gameWon() {
         getStatsLabel().setText("<html><b>Press Quit to Exit</b></html>");
         getActionLabel().setVisible(false);
