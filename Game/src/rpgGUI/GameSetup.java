@@ -48,11 +48,11 @@ public class GameSetup extends DisplayMap {
 
     public int x = 0; //Used for the x movement
     public int y = 425; //Used for y movement
-    public boolean demon1Dead = false;
-    public boolean demon2Dead = false;
-    public boolean spiderDead = false;
-    public boolean vampireDead = false;
-    public boolean giantDead = false;
+    public static boolean demon1Dead = false;
+    public static boolean demon2Dead = false;
+    public static boolean spiderDead = false;
+    public static boolean vampireDead = false;
+    public static boolean giantDead = false;
 
     public GameSetup() throws IOException {
         super();
@@ -458,6 +458,11 @@ public class GameSetup extends DisplayMap {
         getAttack().setVisible(false);
         getHeal().setVisible(false);
         getQuit().setVisible(true);
+    }
+    
+    public void refreshMap() {
+        getMapPanel().validate();
+        getMapPanel().repaint();
     }
 
     /**

@@ -14,31 +14,47 @@ import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 
 /**
- *
- * @author Liam O'Connor
+ * DisplayMap class creates and refreshes the Map for the game
+ * @author Liam O'Connor, Daniel Willis, Aidan Lacey ID: 18048495, 19079994,
+ * 17994308
  */
 public class DisplayMap implements ActionListener {
 
     private JPanel gameplayCenterPanel;
     private int horisMove;
     private int vertMove;
-
+    
+    /**
+    * @return horisMove
+    */
     public int getHorisMove() {
         return horisMove;
     }
 
+    /**
+    * @sets horisMove
+    */
     public void setHorisMove(int horisMove) {
         this.horisMove = horisMove;
     }
 
+    /**
+    * @return vertMove
+    */
     public int getVertMove() {
         return vertMove;
     }
 
+    /**
+    * @sets vertMove
+    */
     public void setVertMove(int vertMove) {
         this.vertMove = vertMove;
     }
 
+    /**
+    * @Attempts to dislay the map (gameplayCenterPanel) JPanel
+    */
     public DisplayMap() throws IOException {
 
         this.gameplayCenterPanel = new JPanel();
@@ -55,9 +71,14 @@ public class DisplayMap implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 
+    /**
+    * Creates the player and enemies images,
+    * sets the sizes and types of the images
+    * and displays the images on the map (gameplayCenterPanel)
+    */
     class DrawCharacter extends JPanel {
 
         BufferedImage warrior;
@@ -96,20 +117,12 @@ public class DisplayMap implements ActionListener {
             return new Dimension(800, 500);
         }
 
+        //Display player and enemies on the map
         public void paintComponent(Graphics g) {
 
             Component c = getGameplayCenterPanel();
             paintBorder(c, g, 0, 0, 800, 500);
-            if (GameSetup.getCharacter() == 1) {
-                g.drawImage(warrior, getHorisMove(), getVertMove(), 75, 75, c);
-            }
-            if (GameSetup.getCharacter() == 2) {
-                g.drawImage(elf, getHorisMove(), getVertMove(), 75, 75, c);
-            }
-            if (GameSetup.getCharacter() == 3) {
-                g.drawImage(dwarf, getHorisMove(), getVertMove(), 75, 75, c);
-            }
-
+            
             //g.drawImage("", xdist, ydist, c);
             g.drawImage(demon, 250, 450, c);
             g.drawImage(demon, 550, 450, c);
@@ -118,8 +131,39 @@ public class DisplayMap implements ActionListener {
             g.drawImage(giant, 550, 150, c);
             g.drawImage(orcBoss, 350, 50, c);
 
+            //If enemies have been killed, remove them from map
+            g.setColor(new Color(10, 20, 50));
+            if (GameSetup.demon1Dead == true){
+                g.fillRect(250, 420, 75, 75);
+            }
+            if (GameSetup.demon2Dead == true){
+                g.fillRect(550, 420, 75, 75);
+            }
+            if (GameSetup.spiderDead == true){
+                g.fillRect(350, 335, 75, 75);
+            }
+            if (GameSetup.vampireDead == true){
+                g.fillRect(250, 220, 75, 75);
+            }
+            if (GameSetup.giantDead == true){
+                g.fillRect(550, 135, 75, 75);
+            }
+
+            //If the player is a warrior, move warrior image
+            if (GameSetup.getCharacter() == 1) {
+                g.drawImage(warrior, getHorisMove(), getVertMove(), 75, 75, c);
+            }
+	    //If the player is an elf, move elf image
+            if (GameSetup.getCharacter() == 2) {
+                g.drawImage(elf, getHorisMove(), getVertMove(), 75, 75, c);
+            }
+	    //If the player is a dwarf, move dwarf image
+            if (GameSetup.getCharacter() == 3) {
+                g.drawImage(dwarf, getHorisMove(), getVertMove(), 75, 75, c);
+            }
         }
 
+        //Create visible entrances to the next floor
         protected void paintBorder(Component c, Graphics g, int x, int y, int width, int height) {
 
             g.setColor(Color.white);
@@ -131,6 +175,9 @@ public class DisplayMap implements ActionListener {
         }
     }
 
+    /**
+    * @return the gameplayCenterPanel JPanel
+    */
     public JPanel getGameplayCenterPanel() {
         return this.gameplayCenterPanel;
     }
